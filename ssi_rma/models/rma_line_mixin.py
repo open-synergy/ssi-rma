@@ -17,51 +17,35 @@ class RMALineMixin(models.AbstractModel):
         comodel_name="rma_order_mixin",
         string="RMA Order",
         required=True,
-        ondelete="cascade"
+        ondelete="cascade",
     )
-    sequence = fields.Integer(
-        string="Sequence",
-        required=True,
-        default=10
-    )
-    lot_id = fields.Many2one(
-        comodel_name="stock.production.lot",
-        string="Lot"
-    )
+    sequence = fields.Integer(string="Sequence", required=True, default=10)
+    lot_id = fields.Many2one(comodel_name="stock.production.lot", string="Lot")
     stock_move_ids = fields.Many2many(
         comodel_name="stock.move",
-        # relation="rel_rma_order_line_2_stock_move",
         column1="line_id",
         column2="move_id",
-        string="Stock Moves"
+        string="Stock Moves",
     )
     qty_to_receive = fields.Float(
-        string="Qty to Receive",
-        compute="_compute_qty_to_receive",
-        store=True
+        string="Qty to Receive", compute="_compute_qty_to_receive", store=True
     )
     qty_incoming = fields.Float(
         string="Qty Incoming",
         compute="_compute_qty_incoming",
     )
     qty_received = fields.Float(
-        string="Qty Received",
-        compute="_compute_qty_received",
-        store=True
+        string="Qty Received", compute="_compute_qty_received", store=True
     )
     qty_to_deliver = fields.Float(
-        string="Qty to Deliver",
-        compute="_compute_qty_to_deliver",
-        store=True
+        string="Qty to Deliver", compute="_compute_qty_to_deliver", store=True
     )
     qty_outgoing = fields.Float(
         string="Qty Outgoing",
         compute="_compute_qty_outgoing",
     )
     qty_delivered = fields.Float(
-        string="Qty Delivered",
-        compute="_compute_qty_delivered",
-        store=True
+        string="Qty Delivered", compute="_compute_qty_delivered", store=True
     )
 
     @api.depends(
@@ -71,7 +55,14 @@ class RMALineMixin(models.AbstractModel):
     )
     def _compute_qty_to_receive(self):
         for record in self:
-            record.qty_to_receive = record._get_rma_move_qty(("draft","waiting","confirmed","partially_available","assigned"), "in")
+            states = [
+                "draft",
+                "waiting",
+                "confirmed",
+                "partially_available",
+                "assigned",
+            ]
+            record.qty_to_receive = record._get_rma_move_qty(states, "in")
 
     @api.depends(
         "stock_move_ids",
@@ -80,7 +71,14 @@ class RMALineMixin(models.AbstractModel):
     )
     def _compute_qty_incoming(self):
         for record in self:
-            record.qty_to_receive = record._get_rma_move_qty(("draft","waiting","confirmed","partially_available","assigned"), "in")
+            states = [
+                "draft",
+                "waiting",
+                "confirmed",
+                "partially_available",
+                "assigned",
+            ]
+            record.qty_incoming = record._get_rma_move_qty(states, "in")
 
     @api.depends(
         "stock_move_ids",
@@ -89,7 +87,10 @@ class RMALineMixin(models.AbstractModel):
     )
     def _compute_qty_received(self):
         for record in self:
-            record.qty_to_receive = record._get_rma_move_qty(("done"), "in")
+            states = [
+                "done",
+            ]
+            record.qty_received = record._get_rma_move_qty(states, "in")
 
     @api.depends(
         "stock_move_ids",
@@ -98,7 +99,10 @@ class RMALineMixin(models.AbstractModel):
     )
     def _compute_qty_to_deliver(self):
         for record in self:
-            record.qty_to_receive = record._get_rma_move_qty(("done"), "in")
+            states = [
+                "done",
+            ]
+            record.qty_to_deliver = record._get_rma_move_qty(states, "in")
 
     @api.depends(
         "stock_move_ids",
@@ -107,7 +111,14 @@ class RMALineMixin(models.AbstractModel):
     )
     def _compute_qty_outgoing(self):
         for record in self:
-            record.qty_to_receive = record._get_rma_move_qty(("draft","waiting","confirmed","partially_available","assigned"), "out")
+            states = [
+                "draft",
+                "waiting",
+                "confirmed",
+                "partially_available",
+                "assigned",
+            ]
+            record.qty_outgoing = record._get_rma_move_qty(states, "out")
 
     @api.depends(
         "stock_move_ids",
@@ -116,8 +127,10 @@ class RMALineMixin(models.AbstractModel):
     )
     def _compute_qty_delivered(self):
         for record in self:
-            record.qty_to_receive = record._get_rma_move_qty(("done"), "out")
+            states = [
+                "done",
+            ]
+            record.qty_delivered = record._get_rma_move_qty(states, "out")
 
     def _get_rma_move_qty(self, states, direction):
-        for record in self:
-            qty = 0.0
+        pass

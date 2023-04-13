@@ -4,10 +4,22 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
     <data noupdate="1">
-        <record id="rma_sequence" model="ir.sequence">
-            <field name="name">RMA Up</field>
-            <field name="code">rma_order_mixin</field>
-            <field name="prefix">RMA-UP/%(range_year)s/</field>
+        <!-- RMA CUSTOMER -->
+        <record id="rma_customer_sequence" model="ir.sequence">
+            <field name="name">RMA Customer</field>
+            <field name="code">rma_customer</field>
+            <field name="prefix">RMA-CUST/%(range_year)s/</field>
+            <field eval="1" name="number_next" />
+            <field eval="1" name="number_increment" />
+            <field name="padding" eval="6" />
+            <field name="use_date_range" eval="1" />
+            <field eval="False" name="company_id" />
+        </record>
+        <!-- RMA SUPPLIER -->
+        <record id="rma_supplier_sequence" model="ir.sequence">
+            <field name="name">RMA Supplier</field>
+            <field name="code">rma_supplier</field>
+            <field name="prefix">RMA-SUPP/%(range_year)s/</field>
             <field eval="1" name="number_next" />
             <field eval="1" name="number_increment" />
             <field name="padding" eval="6" />
