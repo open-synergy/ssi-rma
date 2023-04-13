@@ -2,26 +2,19 @@
 # Copyright 2023 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class RMASupplier(models.Model):
     _name = "rma_supplier"
     _description = "RMA Supplier"
-    _inherit = [
-        "rma_order_mixin"
-    ]
+    _inherit = ["rma_order_mixin"]
 
     type = fields.Selection(
         string="Type",
-        default="_default_type"
+        default="supplier",
     )
     line_ids = fields.One2many(
         comodel_name="rma_supplier_line",
         inverse_name="order_id",
     )
-
-    @api.model
-    def _default_type(self):
-        value = "supplier"
-        return value

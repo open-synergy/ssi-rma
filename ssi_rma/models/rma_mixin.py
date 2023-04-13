@@ -69,7 +69,7 @@ class RMAMixin(models.AbstractModel):
         selection=[
             ("customer", "Customer"),
             ("supplier", "Supplier"),
-        ]
+        ],
     )
     operation_id = fields.Many2one(
         comodel_name="rma_operation",
@@ -82,7 +82,7 @@ class RMAMixin(models.AbstractModel):
     allowed_route_template_ids = fields.Many2many(
         related="operation_id.allowed_route_template_ids",
         string="Allowed Route Templates",
-        store=False
+        store=False,
     )
     route_template_id = fields.Many2one(
         comodel_name="rma_route_template",
@@ -145,3 +145,9 @@ class RMAMixin(models.AbstractModel):
         ]
         res += policy_field
         return res
+
+    @api.onchange("operation_id")
+    def onchange_route_template_id(self):
+        self.route_template_id = False
+        if self.operation_id:
+            self.route_template_id = self.operation_id.default_route_template_id.id

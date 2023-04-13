@@ -9,12 +9,6 @@ access_rma_policy_rule_configurator,rma_policy_rule - configurator,model_rma_pol
 access_rma_policy_rule_all,rma_policy_rule - all,model_rma_policy_rule,,1,0,0,0
 access_rma_route_template_configurator,rma_route_template - configurator,model_rma_route_template,rma_route_template_group,1,1,1,1
 access_rma_route_template_all,rma_route_template - all,model_rma_route_template,,1,0,0,0
-access_rma_order_mixin_all,rma_order_mixin - all,model_rma_order_mixin,,1,0,0,0
-access_rma_order_mixin_viewer,rma_order_mixin - viewer,model_rma_order_mixin,rma_order_mixin_viewer_group,1,0,0,0
-access_rma_order_mixin_user,rma_order_mixin - user,model_rma_order_mixin,rma_order_mixin_user_group,1,1,1,1
-access_rma_line_mixin_all,rma_line_mixin - all,model_rma_line_mixin,,1,0,0,0
-access_rma_line_mixin_viewer,rma_line_mixin - viewer,model_rma_line_mixin,rma_order_mixin_viewer_group,1,0,0,0
-access_rma_line_mixin_user,rma_line_mixin - user,model_rma_line_mixin,rma_order_mixin_user_group,1,1,1,1
 access_rma_customer_all,rma_customer - all,model_rma_customer,,1,0,0,0
 access_rma_customer_viewer,rma_customer - viewer,model_rma_customer,rma_customer_viewer_group,1,0,0,0
 access_rma_customer_user,rma_customer - user,model_rma_customer,rma_customer_user_group,1,1,1,1
