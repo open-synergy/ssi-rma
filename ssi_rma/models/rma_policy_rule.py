@@ -1,8 +1,8 @@
 # Copyright 2023 OpenSynergy Indonesia
 # Copyright 2023 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class RMAPolicyRule(models.Model):
@@ -13,13 +13,9 @@ class RMAPolicyRule(models.Model):
         comodel_name="rma_policy",
         string="RMA Policy",
         required=True,
-        ondelete="cascade"
+        ondelete="cascade",
     )
-    sequence = fields.Integer(
-        string="Sequence",
-        required=True,
-        default=10
-    )
+    sequence = fields.Integer(string="Sequence", required=True, default=10)
     operator = fields.Selection(
         string="Operator",
         selection=[
@@ -27,10 +23,8 @@ class RMAPolicyRule(models.Model):
             ("+", "+"),
         ],
         required=True,
-        default="+"
+        default="+",
     )
     policy_field_id = fields.Many2one(
-        comodel_name="rma_policy_field",
-        required=True,
-        ondelete="restrict"
+        comodel_name="rma_policy_field", required=True, ondelete="restrict"
     )

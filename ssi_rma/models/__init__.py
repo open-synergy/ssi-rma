@@ -1,6 +1,6 @@
 # Copyright 2023 OpenSynergy Indonesia
 # Copyright 2023 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import (
     rma_mixin,
@@ -13,5 +13,7 @@ from . import (
     rma_route_template,
     rma_policy,
     rma_policy_rule,
-    rma_policy_field
+    rma_policy_field,
+    stock_move,
+    stock_rule,
 )

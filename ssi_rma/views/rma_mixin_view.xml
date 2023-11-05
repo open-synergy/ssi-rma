@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--Copyright 2023 OpenSynergy Indonesia-->
 <!--Copyright 2023 PT. Simetri Sinergi Indonesia-->
-<!--License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).-->
+<!--License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).-->
 <odoo>
     <record id="rma_mixin_view_tree" model="ir.ui.view">
         <field name="name">rma_mixin - Tree</field>
@@ -17,7 +17,7 @@
                 <field name="partner_id" widget="many2one_avatar" />
                 <field name="contact_partner_id" widget="many2one_avatar" />
                 <field name="date" />
-                <field name="date_duration" />
+                <field name="date_due" />
                 <field name="operation_id" />
                 <field name="route_template_id" />
             </xpath>
@@ -46,7 +46,7 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='user_id']" position="after">
-                <field name="type" />
+                <field name="type" invisible="1" />
                 <field name="partner_id" widget="many2one_avatar" />
                 <field
                     name="allowed_contact_ids"
@@ -62,7 +62,7 @@
             <xpath expr="//group[@name='header_right']" position="inside">
                 <field name="date" />
                 <field name="duration_id" />
-               <field name="date_duration" />
+                <field name="date_due" />
                 <field name="operation_id" />
                 <field
                     name="allowed_route_template_ids"
@@ -125,7 +125,7 @@
                             </group>
                             <notebook>
                                 <page name="move" string="Stock Move">
-                                    <field name="stock_move_ids" />
+                                    <field name="stock_move_ids" readonly="1" />
                                 </page>
                                 <page name="quantity" string="Quantities">
                                     <group name="quantity" colspan="4" col="2">
@@ -144,6 +144,34 @@
                             </notebook>
                         </form>
                     </field>
+                </page>
+                <page name="procurement" string="Procurement">
+                    <button
+                        name="action_create_reception"
+                        type="object"
+                        string="Create Reception"
+                        class="oe_highlight"
+                        icon="fa-sign-in"
+                        attrs="{'invisible':[('receipt_ok','=',False)]}"
+                    />
+                    <button
+                        name="action_create_delivery"
+                        type="object"
+                        string="Create Delivery"
+                        class="oe_highlight"
+                        icon="fa-sign-out"
+                        attrs="{'invisible':[('deliver_ok','=',False)]}"
+                    />
+                    <group name="procurement_1" colspan="4" col="2">
+                        <field name="group_id" />
+                    </group>
+                    <group name="procurement_2" colspan="4" col="2" invisible="1">
+                        <field name="qty_to_receipt" />
+                        <field name="qty_to_deliver" />
+                        <field name="receipt_ok" />
+                        <field name="deliver_ok" />
+                        <field name="resolve_ok" />
+                    </group>
                 </page>
             </xpath>
         </field>

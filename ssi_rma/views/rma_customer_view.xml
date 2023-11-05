@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--Copyright 2023 OpenSynergy Indonesia-->
 <!--Copyright 2023 PT. Simetri Sinergi Indonesia-->
-<!--License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).-->
+<!--License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).-->
 <odoo>
     <record id="rma_customer_view_tree" model="ir.ui.view">
         <field name="name">RMA Customers - Tree</field>
@@ -29,7 +29,8 @@
         <field name="mode">primary</field>
         <field name="inherit_id" ref="rma_mixin_view_form" />
         <field name="arch" type="xml">
-            <data />
+            <data>
+            </data>
         </field>
     </record>
 

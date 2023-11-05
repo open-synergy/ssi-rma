@@ -1,8 +1,10 @@
 # Copyright 2023 OpenSynergy Indonesia
 # Copyright 2023 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+
+from odoo.addons.ssi_decorator import ssi_decorator
 
 
 class RMAMixin(models.AbstractModel):
@@ -10,12 +12,13 @@ class RMAMixin(models.AbstractModel):
     _description = "RMA Mixin"
     _abstract = True
     _inherit = [
-        "mixin.transaction_confirm",
-        "mixin.transaction_open",
-        "mixin.transaction_done",
         "mixin.transaction_cancel",
         "mixin.transaction_terminate",
-        "mixin.partner",
+        "mixin.transaction_done",
+        "mixin.transaction_open",
+        "mixin.transaction_confirm",
+        "mixin.transaction_partner",
+        "mixin.transaction_date_due",
     ]
 
     # Multiple Approval Attribute
@@ -27,6 +30,8 @@ class RMAMixin(models.AbstractModel):
     # Attributes related to add element on view automatically
     _automatically_insert_view_element = True
     _automatically_insert_multiple_approval_page = True
+    _automatically_insert_done_policy_fields = False
+    _automatically_insert_done_button = False
 
     _statusbar_visible_label = "draft,confirm,open,done"
     _policy_field_order = [
@@ -44,7 +49,6 @@ class RMAMixin(models.AbstractModel):
         "action_confirm",
         "action_approve_approval",
         "action_reject_approval",
-        "action_done",
         "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
         "%(ssi_transaction_terminate_mixin.base_select_terminate_reason_action)d",
         "action_restart",
@@ -92,22 +96,10 @@ class RMAMixin(models.AbstractModel):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
-    date = fields.Date(
-        string="Date",
-        required=True,
-        readonly=True,
-        states={"draft": [("readonly", False)]},
-    )
-    duration_id = fields.Many2one(
-        comodel_name="base.duration",
-        string="Duration",
-        readonly=True,
-        states={"draft": [("readonly", False)]},
-    )
-    date_duration = fields.Date(
-        string="Date",
-        readonly=True,
-        states={"draft": [("readonly", False)]},
+    group_id = fields.Many2one(
+        comodel_name="procurement.group",
+        string="Procurement Group",
+        ondelete="restrict",
     )
     line_ids = fields.One2many(
         comodel_name="rma_line_mixin",
@@ -115,18 +107,142 @@ class RMAMixin(models.AbstractModel):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
-    state = fields.Selection(
-        string="State",
-        selection=[
-            ("draft", "Draft"),
-            ("confirm", "Waiting for Approval"),
-            ("open", "In Progress"),
-            ("done", "Done"),
-            ("cancel", "Cancelled"),
-            ("terminate", "Terminated"),
-            ("reject", "Reject"),
-        ],
+    qty_to_receipt = fields.Float(
+        string="Qty To Receipt",
+        compute="_compute_qty_to_receipt",
+        store=True,
     )
+    qty_to_deliver = fields.Float(
+        string="Qty To Deliver",
+        compute="_compute_qty_to_deliver",
+        store=True,
+    )
+    receipt_ok = fields.Boolean(
+        string="Receipt Ok",
+        compute="_compute_receipt_ok",
+        store=True,
+    )
+    deliver_ok = fields.Boolean(
+        string="Deliver Ok",
+        compute="_compute_deliver_ok",
+        store=True,
+    )
+    resolve_ok = fields.Boolean(
+        string="Resolve Ok",
+        compute="_compute_resolve_ok",
+        store=True,
+    )
+
+    def _get_resolve_ok_trigger(self):
+        return [
+            "receipt_ok",
+            "deliver_ok",
+        ]
+
+    @api.depends(lambda self: self._get_resolve_ok_trigger())
+    def _compute_resolve_ok(self):
+        for record in self:
+            result = False
+            for field_name in record._get_resolve_ok_trigger():
+                if not getattr(record, field_name) and record.state == "open":
+                    result = True
+            record.resolve_ok = result
+
+    @api.depends(
+        "line_ids",
+        "line_ids.qty_to_receive",
+    )
+    def _compute_qty_to_receipt(self):
+        for record in self:
+            result = 0.0
+            for line in record.line_ids:
+                result = line.qty_to_receive
+            record.qty_to_receipt = result
+
+    @api.depends(
+        "line_ids",
+        "line_ids.qty_to_deliver",
+    )
+    def _compute_qty_to_deliver(self):
+        for record in self:
+            result = 0.0
+            for line in record.line_ids:
+                result = line.qty_to_deliver
+            record.qty_to_deliver = result
+
+    @api.depends(
+        "qty_to_receipt",
+        "state",
+    )
+    def _compute_receipt_ok(self):
+        for record in self:
+            result = False
+            if record.qty_to_receipt > 0.0 and record.state == "open":
+                result = True
+            record.receipt_ok = result
+
+    @api.depends(
+        "qty_to_deliver",
+        "state",
+    )
+    def _compute_deliver_ok(self):
+        for record in self:
+            result = False
+            if record.qty_to_deliver > 0.0 and record.state == "open":
+                result = True
+            record.deliver_ok = result
+
+    @api.onchange("operation_id")
+    def onchange_route_template_id(self):
+        self.route_template_id = False
+        if self.operation_id:
+            self.route_template_id = self.operation_id.default_route_template_id.id
+
+    def action_create_reception(self):
+        for record in self.sudo():
+            record._create_reception()
+
+    def action_create_delivery(self):
+        for record in self.sudo():
+            record._create_delivery()
+
+    @ssi_decorator.post_open_action()
+    def _create_procurement_group(self):
+        self.ensure_one()
+
+        if self.group_id:
+            return True
+
+        PG = self.env["procurement.group"]
+        group = PG.create(self._prepare_create_procurement_group())
+        self.write(
+            {
+                "group_id": group.id,
+            }
+        )
+
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch
+
+    def _create_reception(self):
+        self.ensure_one()
+        for detail in self.line_ids:
+            detail._create_reception()
+
+    def _create_delivery(self):
+        self.ensure_one()
+        for detail in self.line_ids:
+            detail._create_delivery()
+
+    def _prepare_create_procurement_group(self):
+        self.ensure_one()
+        return {
+            "name": self.name,
+            "partner_id": self.partner_id.id,
+        }
 
     @api.model
     def _get_policy_field(self):
@@ -134,9 +250,8 @@ class RMAMixin(models.AbstractModel):
         policy_field = [
             "confirm_ok",
             "approve_ok",
-            "done_ok",
-            "open_ok",
             "cancel_ok",
+            "open_ok",
             "terminate_ok",
             "reject_ok",
             "restart_ok",
@@ -145,9 +260,3 @@ class RMAMixin(models.AbstractModel):
         ]
         res += policy_field
         return res
-
-    @api.onchange("operation_id")
-    def onchange_route_template_id(self):
-        self.route_template_id = False
-        if self.operation_id:
-            self.route_template_id = self.operation_id.default_route_template_id.id

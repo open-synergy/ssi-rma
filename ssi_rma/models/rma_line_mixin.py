@@ -1,8 +1,9 @@
 # Copyright 2023 OpenSynergy Indonesia
 # Copyright 2023 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 
 class RMALineMixin(models.AbstractModel):
@@ -23,9 +24,15 @@ class RMALineMixin(models.AbstractModel):
     lot_id = fields.Many2one(comodel_name="stock.production.lot", string="Lot")
     stock_move_ids = fields.Many2many(
         comodel_name="stock.move",
+        string="Stock Moves",
         column1="line_id",
         column2="move_id",
-        string="Stock Moves",
+    )
+    product_id = fields.Many2one(
+        required=True,
+    )
+    uom_id = fields.Many2one(
+        required=True,
     )
     qty_to_receive = fields.Float(
         string="Qty to Receive", compute="_compute_qty_to_receive", store=True
@@ -52,17 +59,14 @@ class RMALineMixin(models.AbstractModel):
         "stock_move_ids",
         "stock_move_ids.state",
         "stock_move_ids.product_qty",
+        "order_id",
+        "order_id.operation_id",
+        "uom_quantity",
     )
     def _compute_qty_to_receive(self):
         for record in self:
-            states = [
-                "draft",
-                "waiting",
-                "confirmed",
-                "partially_available",
-                "assigned",
-            ]
-            record.qty_to_receive = record._get_rma_move_qty(states, "in")
+            policy = record.order_id.operation_id.receipt_policy_id
+            record.qty_to_receive = policy._compute_quantity(record)
 
     @api.depends(
         "stock_move_ids",
@@ -96,13 +100,14 @@ class RMALineMixin(models.AbstractModel):
         "stock_move_ids",
         "stock_move_ids.state",
         "stock_move_ids.product_qty",
+        "order_id",
+        "order_id.operation_id",
+        "uom_quantity",
     )
     def _compute_qty_to_deliver(self):
         for record in self:
-            states = [
-                "done",
-            ]
-            record.qty_to_deliver = record._get_rma_move_qty(states, "in")
+            policy = record.order_id.operation_id.delivery_policy_id
+            record.qty_to_deliver = policy._compute_quantity(record)
 
     @api.depends(
         "stock_move_ids",
@@ -133,4 +138,133 @@ class RMALineMixin(models.AbstractModel):
             record.qty_delivered = record._get_rma_move_qty(states, "out")
 
     def _get_rma_move_qty(self, states, direction):
-        pass
+        result = 0.0
+        rma_location = self.order_id.route_template_id.location_id
+        if direction == "in":
+            for move in self.stock_move_ids.filtered(
+                lambda m: m.state in states and m.location_dest_id == rma_location
+            ):
+                result += move.product_qty
+        else:
+            for move in self.stock_move_ids.filtered(
+                lambda m: m.state in states and m.location_id == rma_location
+            ):
+                result += move.product_qty
+        return result
+
+    def _create_reception(self):
+        self.ensure_one()
+        group = self.order_id.group_id
+        qty = self.qty_to_receive
+        values = self._get_receipt_procurement_data()
+
+        procurements = []
+        try:
+            procurement = group.Procurement(
+                self.product_id,
+                qty,
+                self.uom_id,
+                values.get("location_id"),
+                values.get("origin"),
+                values.get("origin"),
+                self.env.company,
+                values,
+            )
+
+            procurements.append(procurement)
+            self.env["procurement.group"].with_context(rma_route_check=[True]).run(
+                procurements
+            )
+        except UserError as error:
+            raise UserError(error)
+
+    def _create_delivery(self):
+        self.ensure_one()
+        group = self.order_id.group_id
+        qty = self.qty_to_deliver
+        values = self._get_delivery_procurement_data()
+
+        procurements = []
+        try:
+            procurement = group.Procurement(
+                self.product_id,
+                qty,
+                self.uom_id,
+                values.get("location_id"),
+                values.get("origin"),
+                values.get("origin"),
+                self.env.company,
+                values,
+            )
+
+            procurements.append(procurement)
+            self.env["procurement.group"].with_context(rma_route_check=[True]).run(
+                procurements
+            )
+        except UserError as error:
+            raise UserError(error)
+
+    def _get_receipt_procurement_data(self):
+        group = self.order_id.group_id
+        origin = self.order_id.name
+        warehouse = self.order_id.route_template_id.inbound_warehouse_id
+        location = self.order_id.route_template_id.location_id
+        route = self.order_id.route_template_id.inbound_route_id
+        result = {
+            "name": self.order_id.name,
+            "group_id": group,
+            "origin": origin,
+            "warehouse_id": warehouse,
+            "date_planned": fields.Datetime.now(),
+            "product_id": self.product_id.id,
+            "product_qty": self.qty_to_receive,
+            "partner_id": self.order_id.partner_id.id,
+            "product_uom": self.uom_id.id,
+            "location_id": location,
+            "route_ids": route,
+        }
+        if self._name == "rma_customer_line":
+            result.update(
+                {
+                    "customer_rma_line_ids": [(4, self.id)],
+                }
+            )
+        elif self._name == "rm_supplier_line":
+            result.update(
+                {
+                    "supplier_rma_line_ids": [(4, self.id)],
+                }
+            )
+        return result
+
+    def _get_delivery_procurement_data(self):
+        group = self.order_id.group_id
+        origin = self.order_id.name
+        warehouse = self.order_id.route_template_id.outbound_warehouse_id
+        route = self.order_id.route_template_id.outbound_route_id
+        result = {
+            "name": self.order_id.name,
+            "group_id": group,
+            "origin": origin,
+            "warehouse_id": warehouse,
+            "date_planned": fields.Datetime.now(),
+            "product_id": self.product_id.id,
+            "product_qty": self.qty_to_deliver,
+            "partner_id": self.order_id.partner_id.id,
+            "product_uom": self.uom_id.id,
+            "location_id": self.order_id.partner_id.property_stock_customer,
+            "route_ids": route,
+        }
+        if self._name == "rma_customer_line":
+            result.update(
+                {
+                    "customer_rma_line_ids": [(4, self.id)],
+                }
+            )
+        elif self._name == "rm_supplier_line":
+            result.update(
+                {
+                    "supplier_rma_line_ids": [(4, self.id)],
+                }
+            )
+        return result
