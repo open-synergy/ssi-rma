@@ -21,6 +21,7 @@
         "ssi_transaction_date_due_mixin",
         "ssi_product_line_price_mixin",
         "ssi_partner_mixin",
+        "base_automation",
     ],
     "data": [
         "security/ir_module_category_data.xml",
