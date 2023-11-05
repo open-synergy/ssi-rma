@@ -18,6 +18,7 @@
         "ssi_transaction_terminate_mixin",
         "ssi_transaction_cancel_mixin",
         "ssi_transaction_partner_mixin",
+        "ssi_transaction_date_due_mixin",
         "ssi_product_line_price_mixin",
         "ssi_partner_mixin",
     ],
