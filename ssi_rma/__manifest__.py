@@ -48,6 +48,10 @@
         "views/rma_policy_field_view.xml",
         "views/rma_policy_view.xml",
         "views/rma_route_template_view.xml",
+        "views/customer_rma_in_views.xml",
+        "views/customer_rma_out_views.xml",
+        "views/supplier_rma_in_views.xml",
+        "views/supplier_rma_out_views.xml",
     ],
     "demo": [
         "demo/stock_location_route_demo.xml",
