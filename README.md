@@ -18,7 +18,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_rma](ssi_rma/) | 14.0.1.1.0 |  | RMA
+[ssi_rma](ssi_rma/) | 14.0.1.2.0 |  | RMA
 
 [//]: # (end addons)
 
