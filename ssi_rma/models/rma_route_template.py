@@ -40,6 +40,12 @@ class RMARouteTemplate(models.Model):
         required=True,
         ondelete="restrict",
     )
+    partner_location_id = fields.Many2one(
+        comodel_name="stock.location",
+        string="Partner Location",
+        required=False,
+        ondelete="restrict",
+    )
     customer_to_supplier = fields.Boolean(
         string="The customer will send to the supplier", default=False
     )

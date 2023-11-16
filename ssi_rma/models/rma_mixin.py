@@ -100,6 +100,7 @@ class RMAMixin(models.AbstractModel):
         comodel_name="procurement.group",
         string="Procurement Group",
         ondelete="restrict",
+        readonly=True,
     )
     line_ids = fields.One2many(
         comodel_name="rma_line_mixin",
