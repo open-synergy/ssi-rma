@@ -21,6 +21,12 @@ class RMALineMixin(models.AbstractModel):
         ondelete="cascade",
     )
     sequence = fields.Integer(string="Sequence", required=True, default=10)
+    allowed_lot_ids = fields.Many2many(
+        string="Allowed Lots",
+        comodel_name="stock.production.lot",
+        compute="_compute_allowed_lot_ids",
+        store=False,
+    )
     lot_id = fields.Many2one(comodel_name="stock.production.lot", string="Lot")
     stock_move_ids = fields.Many2many(
         comodel_name="stock.move",
@@ -54,6 +60,21 @@ class RMALineMixin(models.AbstractModel):
     qty_delivered = fields.Float(
         string="Qty Delivered", compute="_compute_qty_delivered", store=True
     )
+
+    @api.depends(
+        "product_id",
+    )
+    def _compute_allowed_lot_ids(self):
+        for record in self:
+            result = []
+            if record.product_id:
+                Lot = self.env["stock.production.lot"]
+                result = Lot.search(
+                    [
+                        ("product_id", "=", record.product_id.id),
+                    ]
+                ).ids
+            record.allowed_lot_ids = result
 
     @api.depends(
         "stock_move_ids",
@@ -136,6 +157,31 @@ class RMALineMixin(models.AbstractModel):
                 "done",
             ]
             record.qty_delivered = record._get_rma_move_qty(states, "out")
+
+    @api.onchange(
+        "product_id",
+    )
+    def onchange_lot_id(self):
+        self.lot_id = False
+
+    @api.onchange(
+        "product_id",
+        "uom_quantity",
+        "uom_id",
+        "pricelist_id",
+        "lot_id",
+    )
+    def onchange_price_unit(self):
+        _super = super(RMALineMixin, self)
+        self.price_unit = 0.0
+        if self.lot_id and self.uom_quantity and self.uom_quantity != 0.0:
+            self.price_unit = 7.0
+            if self.lot_id.quant_ids:
+
+                quant = self.lot_id.quant_ids[-1]
+                self.price_unit = quant.value / self.uom_quantity
+        else:
+            _super.onchange_price_unit()
 
     def _get_rma_move_qty(self, states, direction):
         result = 0.0
@@ -222,6 +268,8 @@ class RMALineMixin(models.AbstractModel):
             "product_uom": self.uom_id.id,
             "location_id": location,
             "route_ids": route,
+            "price_unit": self.price_unit,
+            "forced_lot_id": self.lot_id and self.lot_id.id,
         }
         if self._name == "rma_customer_line":
             result.update(
@@ -242,6 +290,10 @@ class RMALineMixin(models.AbstractModel):
         origin = self.order_id.name
         warehouse = self.order_id.route_template_id.outbound_warehouse_id
         route = self.order_id.route_template_id.outbound_route_id
+        location = (
+            self.order_id.route_template_id.partner_location_id
+            or self.order_id.partner_id.property_stock_customer,
+        )  # TODO
         result = {
             "name": self.order_id.name,
             "group_id": group,
@@ -252,8 +304,9 @@ class RMALineMixin(models.AbstractModel):
             "product_qty": self.qty_to_deliver,
             "partner_id": self.order_id.partner_id.id,
             "product_uom": self.uom_id.id,
-            "location_id": self.order_id.partner_id.property_stock_customer,
+            "location_id": location,
             "route_ids": route,
+            "forced_lot_id": self.lot_id and self.lot_id.id,
         }
         if self._name == "rma_customer_line":
             result.update(

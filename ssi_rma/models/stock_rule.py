@@ -12,7 +12,9 @@ class StockRule(models.Model):
     def _get_custom_move_fields(self):
         _super = super(StockRule, self)
         result = _super._get_custom_move_fields()
-        result.append(
+        result += [
             "customer_rma_line_ids",
-        )
+            "price_unit",
+            "forced_lot_id",
+        ]
         return result

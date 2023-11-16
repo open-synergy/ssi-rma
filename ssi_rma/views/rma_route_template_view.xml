@@ -41,6 +41,7 @@
             <data>
                 <xpath expr="//field[@name='active']" position="after">
                     <field name="location_id" />
+                    <field name="partner_location_id" />
                     <field name="customer_to_supplier" />
                     <field name="supplier_to_customer" />
                 </xpath>

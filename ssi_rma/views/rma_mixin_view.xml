@@ -92,7 +92,15 @@
                                     <field name="sequence" />
                                     <field name="product_id" />
                                     <field name="name" />
-                                    <field name="lot_id" />
+                                    <field
+                                        name="allowed_lot_ids"
+                                        widget="many2many_tags"
+                                        invisible="1"
+                                    />
+                                    <field
+                                        name="lot_id"
+                                        domain="[('id','in',allowed_lot_ids)]"
+                                    />
                                 </group>
                                 <group name="form_detail2" colspan="1" col="2">
                                     <field
@@ -153,6 +161,7 @@
                         class="oe_highlight"
                         icon="fa-sign-in"
                         attrs="{'invisible':[('receipt_ok','=',False)]}"
+                        style="margin-right:4px"
                     />
                     <button
                         name="action_create_delivery"
