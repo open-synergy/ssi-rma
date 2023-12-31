@@ -43,9 +43,9 @@
     <menuitem
         id="rma_customer_menu"
         name="RMA Customers"
-        parent="menu_rma"
+        parent="stock.menu_stock_warehouse_mgmt"
         action="rma_customer_action"
         groups="rma_customer_viewer_group"
-        sequence="10"
+        sequence="180"
     />
 </odoo>

@@ -292,8 +292,9 @@ class RMALineMixin(models.AbstractModel):
         route = self.order_id.route_template_id.outbound_route_id
         location = (
             self.order_id.route_template_id.partner_location_id
-            or self.order_id.partner_id.property_stock_customer,
-        )  # TODO
+            or self.order_id.partner_id.property_stock_customer
+        )
+
         result = {
             "name": self.order_id.name,
             "group_id": group,

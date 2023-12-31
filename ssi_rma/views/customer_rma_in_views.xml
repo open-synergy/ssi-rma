@@ -24,6 +24,6 @@
         parent="ssi_stock.menu_incoming_movement"
         groups="customer_rma_in_viewer_group"
         action="customer_rma_in_action"
-        sequence="210"
+        sequence="103"
     />
 </odoo>

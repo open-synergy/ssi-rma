@@ -42,9 +42,9 @@
     <menuitem
         id="rma_supplier_menu"
         name="RMA Suppliers"
-        parent="menu_rma"
+        parent="stock.menu_stock_warehouse_mgmt"
         action="rma_supplier_action"
         groups="rma_supplier_viewer_group"
-        sequence="10"
+        sequence="180"
     />
 </odoo>
