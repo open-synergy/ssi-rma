@@ -108,6 +108,11 @@ class RMAMixin(models.AbstractModel):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    uom_quantity = fields.Float(
+        string="UoM Quantity",
+        compute="_compute_uom_quantity",
+        store=True,
+    )
     qty_to_receipt = fields.Float(
         string="Qty To Receipt",
         compute="_compute_qty_to_receipt",
@@ -116,6 +121,42 @@ class RMAMixin(models.AbstractModel):
     qty_to_deliver = fields.Float(
         string="Qty To Deliver",
         compute="_compute_qty_to_deliver",
+        store=True,
+    )
+    qty_received = fields.Float(
+        string="Qty Received", compute="_compute_qty_received", store=True
+    )
+    qty_delivered = fields.Float(
+        string="Qty Delivered", compute="_compute_qty_delivered", store=True
+    )
+    need_delivery = fields.Boolean(
+        string="Need Delivery",
+        compute="_compute_need_delivery",
+        store=True,
+    )
+    percent_delivery = fields.Float(
+        string="Percent Delivery",
+        compute="_compute_percent_delivery",
+        store=True,
+    )
+    need_reception = fields.Boolean(
+        string="Need Reception",
+        compute="_compute_need_reception",
+        store=True,
+    )
+    percent_reception = fields.Float(
+        string="Percent Reception",
+        compute="_compute_percent_reception",
+        store=True,
+    )
+    delivery_complete = fields.Boolean(
+        string="Delivery Complete",
+        compute="_compute_delivery_complete",
+        store=True,
+    )
+    reception_complete = fields.Boolean(
+        string="Reception Complete",
+        compute="_compute_reception_complete",
         store=True,
     )
     receipt_ok = fields.Boolean(
@@ -134,20 +175,135 @@ class RMAMixin(models.AbstractModel):
         store=True,
     )
 
+    @api.depends(
+        "line_ids",
+        "line_ids.delivery_complete",
+    )
+    def _compute_delivery_complete(self):
+        for record in self:
+            result = False
+            if len(record.line_ids) > 0:
+                if len(record.line_ids) == len(
+                    record.line_ids.filtered(lambda r: r.delivery_complete)
+                ):
+                    result = True
+            record.delivery_complete = result
+
+    @api.depends(
+        "line_ids",
+        "line_ids.reception_complete",
+    )
+    def _compute_reception_complete(self):
+        for record in self:
+            result = False
+            if len(record.line_ids) > 0:
+                if len(record.line_ids) == len(
+                    record.line_ids.filtered(lambda r: r.reception_complete)
+                ):
+                    result = True
+            record.reception_complete = result
+
+    @api.depends(
+        "uom_quantity",
+        "qty_delivered",
+    )
+    def _compute_percent_delivery(self):
+        for record in self:
+            result = 0.0
+            try:
+                result = record.qty_delivered / record.uom_quantity
+            except ZeroDivisionError:
+                result = 0.0
+            record.percent_delivery = result
+
+    @api.depends(
+        "operation_id",
+    )
+    def _compute_need_delivery(self):
+        for record in self:
+            result = False
+            if (
+                record.operation_id
+                and record.operation_id.delivery_policy_id
+                and len(record.operation_id.delivery_policy_id.rule_ids) > 0
+            ):
+                result = True
+            record.need_delivery = result
+
+    @api.depends(
+        "uom_quantity",
+        "qty_received",
+    )
+    def _compute_percent_reception(self):
+        for record in self:
+            result = 0.0
+            try:
+                result = record.qty_received / record.uom_quantity
+            except ZeroDivisionError:
+                result = 0.0
+            record.percent_reception = result
+
+    @api.depends(
+        "operation_id",
+    )
+    def _compute_need_reception(self):
+        for record in self:
+            result = False
+            if (
+                record.operation_id
+                and record.operation_id.receipt_policy_id
+                and len(record.operation_id.receipt_policy_id.rule_ids) > 0
+            ):
+                result = True
+            record.need_reception = result
+
     def _get_resolve_ok_trigger(self):
         return [
-            "receipt_ok",
-            "deliver_ok",
+            "delivery_complete",
+            "reception_complete",
         ]
 
     @api.depends(lambda self: self._get_resolve_ok_trigger())
     def _compute_resolve_ok(self):
         for record in self:
-            result = False
+            result = True
             for field_name in record._get_resolve_ok_trigger():
-                if not getattr(record, field_name) and record.state == "open":
-                    result = True
+                if not getattr(record, field_name):
+                    result = False
             record.resolve_ok = result
+
+    @api.depends(
+        "line_ids",
+        "line_ids.uom_quantity",
+    )
+    def _compute_uom_quantity(self):
+        for record in self:
+            result = 0.0
+            for line in record.line_ids:
+                result = line.uom_quantity
+            record.uom_quantity = result
+
+    @api.depends(
+        "line_ids",
+        "line_ids.qty_received",
+    )
+    def _compute_qty_received(self):
+        for record in self:
+            result = 0.0
+            for line in record.line_ids:
+                result = line.qty_received
+            record.qty_received = result
+
+    @api.depends(
+        "line_ids",
+        "line_ids.qty_delivered",
+    )
+    def _compute_qty_delivered(self):
+        for record in self:
+            result = 0.0
+            for line in record.line_ids:
+                result = line.qty_delivered
+            record.qty_delivered = result
 
     @api.depends(
         "line_ids",

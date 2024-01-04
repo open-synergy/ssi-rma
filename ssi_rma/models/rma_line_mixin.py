@@ -61,6 +61,130 @@ class RMALineMixin(models.AbstractModel):
         string="Qty Delivered", compute="_compute_qty_delivered", store=True
     )
 
+    need_delivery = fields.Boolean(
+        string="Need Delivery",
+        compute="_compute_need_delivery",
+        store=True,
+    )
+    percent_delivery = fields.Float(
+        string="Percent Delivery",
+        compute="_compute_percent_delivery",
+        store=True,
+    )
+    delivery_complete = fields.Boolean(
+        string="Delivery Complete",
+        compute="_compute_delivery_complete",
+        store=True,
+    )
+    need_reception = fields.Boolean(
+        string="Need Reception",
+        compute="_compute_need_reception",
+        store=True,
+    )
+    percent_reception = fields.Float(
+        string="Percent Reception",
+        compute="_compute_percent_reception",
+        store=True,
+    )
+    reception_complete = fields.Boolean(
+        string="Reception Complete",
+        compute="_compute_reception_complete",
+        store=True,
+    )
+
+    @api.model
+    def _get_qty_field_trigger(self):
+        result = [
+            "order_id",
+            "order_id.operation_id",
+            "uom_quantity",
+            "qty_received",
+            "qty_delivered",
+        ]
+        return result
+
+    @api.depends(
+        "uom_quantity",
+        "qty_delivered",
+    )
+    def _compute_percent_delivery(self):
+        for record in self:
+            result = 0.0
+            try:
+                result = record.qty_delivered / record.uom_quantity
+            except ZeroDivisionError:
+                result = 0.0
+            record.percent_delivery = result
+
+    @api.depends(
+        "order_id",
+        "order_id.operation_id",
+    )
+    def _compute_need_delivery(self):
+        for record in self:
+            result = False
+            if (
+                record.order_id.operation_id
+                and record.order_id.operation_id.delivery_policy_id
+                and len(record.order_id.operation_id.delivery_policy_id.rule_ids) > 0
+            ):
+                result = True
+            record.need_delivery = result
+
+    @api.depends(
+        "need_delivery",
+        "percent_delivery",
+    )
+    def _compute_delivery_complete(self):
+        for record in self:
+            result = False
+            if (
+                record.need_delivery and record.percent_delivery == 1.0
+            ) or not record.need_delivery:
+                result = True
+            record.delivery_complete = result
+
+    @api.depends(
+        "uom_quantity",
+        "qty_received",
+    )
+    def _compute_percent_reception(self):
+        for record in self:
+            result = 0.0
+            try:
+                result = record.qty_received / record.uom_quantity
+            except ZeroDivisionError:
+                result = 0.0
+            record.percent_reception = result
+
+    @api.depends(
+        "order_id",
+        "order_id.operation_id",
+    )
+    def _compute_need_reception(self):
+        for record in self:
+            result = False
+            if (
+                record.order_id.operation_id
+                and record.order_id.operation_id.receipt_policy_id
+                and len(record.order_id.operation_id.receipt_policy_id.rule_ids) > 0
+            ):
+                result = True
+            record.need_reception = result
+
+    @api.depends(
+        "need_reception",
+        "percent_reception",
+    )
+    def _compute_reception_complete(self):
+        for record in self:
+            result = False
+            if (
+                record.need_reception and record.percent_reception == 1.0
+            ) or not record.need_reception:
+                result = True
+            record.reception_complete = result
+
     @api.depends(
         "product_id",
     )
@@ -76,14 +200,7 @@ class RMALineMixin(models.AbstractModel):
                 ).ids
             record.allowed_lot_ids = result
 
-    @api.depends(
-        "stock_move_ids",
-        "stock_move_ids.state",
-        "stock_move_ids.product_qty",
-        "order_id",
-        "order_id.operation_id",
-        "uom_quantity",
-    )
+    @api.depends(lambda self: self._get_qty_field_trigger())
     def _compute_qty_to_receive(self):
         for record in self:
             policy = record.order_id.operation_id.receipt_policy_id
@@ -117,14 +234,7 @@ class RMALineMixin(models.AbstractModel):
             ]
             record.qty_received = record._get_rma_move_qty(states, "in")
 
-    @api.depends(
-        "stock_move_ids",
-        "stock_move_ids.state",
-        "stock_move_ids.product_qty",
-        "order_id",
-        "order_id.operation_id",
-        "uom_quantity",
-    )
+    @api.depends(lambda self: self._get_qty_field_trigger())
     def _compute_qty_to_deliver(self):
         for record in self:
             policy = record.order_id.operation_id.delivery_policy_id
@@ -193,7 +303,8 @@ class RMALineMixin(models.AbstractModel):
                 result += move.product_qty
         else:
             for move in self.stock_move_ids.filtered(
-                lambda m: m.state in states and m.location_id == rma_location
+                lambda m: m.state in states
+                and m.location_dest_id.usage in ["customer", "supplier"]
             ):
                 result += move.product_qty
         return result
