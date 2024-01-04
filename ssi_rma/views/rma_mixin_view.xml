@@ -15,11 +15,29 @@
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="type" invisible="1" />
                 <field name="partner_id" widget="many2one_avatar" />
-                <field name="contact_partner_id" widget="many2one_avatar" />
+                <field
+                    name="contact_partner_id"
+                    optional="hide"
+                    widget="many2one_avatar"
+                />
                 <field name="date" />
                 <field name="date_due" />
                 <field name="operation_id" />
                 <field name="route_template_id" />
+                <field name="need_reception" optional="hide" />
+                <field
+                    name="percent_reception"
+                    string="Reception"
+                    optional="show"
+                    widget="percentage"
+                />
+                <field name="need_delivery" optional="hide" />
+                <field
+                    name="percent_delivery"
+                    string="Delivery"
+                    optional="show"
+                    widget="percentage"
+                />
             </xpath>
         </field>
     </record>
@@ -83,8 +101,22 @@
                             <field name="lot_id" />
                             <field name="uom_quantity" />
                             <field name="uom_id" />
-                            <field name="qty_to_receive" string="To Receive" />
-                            <field name="qty_to_deliver" string="To Deliver" />
+                            <field name="need_reception" optional="hide" />
+                            <field
+                                name="percent_reception"
+                                string="Reception"
+                                optional="show"
+                                widget="percentage"
+                            />
+                            <field name="reception_complete" invisible="1" />
+                            <field name="need_delivery" optional="hide" />
+                            <field
+                                name="percent_delivery"
+                                string="Delivery"
+                                optional="show"
+                                widget="percentage"
+                            />
+                            <field name="delivery_complete" invisible="1" />
                         </tree>
                         <form>
                             <group name="form_detail" colspan="4" col="2">
@@ -136,7 +168,7 @@
                                     <field name="stock_move_ids" readonly="1" />
                                 </page>
                                 <page name="quantity" string="Quantities">
-                                    <group name="quantity" colspan="4" col="2">
+                                    <group name="quantity" colspan="4" col="3">
                                         <group name="quantity1" colspan="1" col="2">
                                             <field name="qty_to_receive" />
                                             <field name="qty_incoming" />
@@ -146,6 +178,10 @@
                                             <field name="qty_to_deliver" />
                                             <field name="qty_outgoing" />
                                             <field name="qty_delivered" />
+                                        </group>
+                                        <group name="quantity3" colspan="1" col="2">
+                                            <field name="reception_complete" />
+                                            <field name="delivery_complete" />
                                         </group>
                                     </group>
                                 </page>
@@ -170,16 +206,41 @@
                         class="oe_highlight"
                         icon="fa-sign-out"
                         attrs="{'invisible':[('deliver_ok','=',False)]}"
+                        style="margin-right:4px"
                     />
                     <group name="procurement_1" colspan="4" col="2">
                         <field name="group_id" />
                     </group>
-                    <group name="procurement_2" colspan="4" col="2" invisible="1">
-                        <field name="qty_to_receipt" />
-                        <field name="qty_to_deliver" />
-                        <field name="receipt_ok" />
-                        <field name="deliver_ok" />
-                        <field name="resolve_ok" />
+                    <group
+                        name="procurement_2"
+                        colspan="4"
+                        col="2"
+                        groups="base.group_no_one"
+                    >
+                        <field name="receipt_ok" groups="base.group_no_one" />
+                        <field name="deliver_ok" groups="base.group_no_one" />
+                        <field name="resolve_ok" groups="base.group_no_one" />
+                    </group>
+                </page>
+                <page name="quantity" string="Quantity">
+                    <group name="quantity_1" colspan="4" col="3">
+                        <group name="quantity_1_1" colspan="1" col="2">
+                            <field name="uom_quantity" />
+                            <field name="qty_to_receipt" />
+                            <field name="qty_to_deliver" />
+                        </group>
+                        <group name="quantity_1_2" colspan="1" col="2">
+                            <field name="qty_received" />
+                            <field name="qty_delivered" />
+                        </group>
+                        <group name="quantity_1_3" colspan="1" col="2">
+                            <field name="percent_reception" widget="percentage" />
+                            <field name="need_reception" />
+                            <field name="delivery_complete" />
+                            <field name="percent_delivery" widget="percentage" />
+                            <field name="need_delivery" />
+                            <field name="reception_complete" />
+                        </group>
                     </group>
                 </page>
             </xpath>
