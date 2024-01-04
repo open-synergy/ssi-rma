@@ -11,7 +11,7 @@ class RMASupplier(models.Model):
     _inherit = ["rma_supplier", "rma_order_mixin"]
 
     # pylint: disable=pointless-statement
-    def _prepare_refund_data(self):  # pylint: disable=pointless-statement
+    def _prepare_refund_data(self):
         _super = super(RMASupplier, self)
         result = _super._prepare_refund_data()
         result["move_type"] == "in_refund"
