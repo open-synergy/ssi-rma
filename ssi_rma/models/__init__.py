@@ -14,6 +14,7 @@ from . import (
     rma_policy,
     rma_policy_rule,
     rma_policy_field,
+    rma_reason,
     stock_move,
     stock_rule,
 )

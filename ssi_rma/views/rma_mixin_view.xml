@@ -22,6 +22,7 @@
                 />
                 <field name="date" />
                 <field name="date_due" />
+                <field name="reason_id" />
                 <field name="operation_id" />
                 <field name="route_template_id" />
                 <field name="need_reception" optional="hide" />
@@ -65,6 +66,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="type" invisible="1" />
+                <field name="operation_id" />
                 <field name="partner_id" widget="many2one_avatar" />
                 <field
                     name="allowed_contact_ids"
@@ -81,16 +83,6 @@
                 <field name="date" />
                 <field name="duration_id" />
                 <field name="date_due" />
-                <field name="operation_id" />
-                <field
-                    name="allowed_route_template_ids"
-                    widget="many2many_tags"
-                    invisible="1"
-                />
-                <field
-                    name="route_template_id"
-                    domain="[('id','in',allowed_route_template_ids)]"
-                />
             </xpath>
             <xpath expr="//page[1]" position="before">
                 <page name="detail" string="Details">
@@ -209,6 +201,15 @@
                         style="margin-right:4px"
                     />
                     <group name="procurement_1" colspan="4" col="2">
+                        <field
+                            name="allowed_route_template_ids"
+                            widget="many2many_tags"
+                            invisible="1"
+                        />
+                        <field
+                            name="route_template_id"
+                            domain="[('id','in',allowed_route_template_ids)]"
+                        />
                         <field name="group_id" />
                     </group>
                     <group
@@ -241,6 +242,11 @@
                             <field name="need_delivery" />
                             <field name="reception_complete" />
                         </group>
+                    </group>
+                </page>
+                <page name="other" string="Other Info">
+                    <group name="other_1" colspan="4" col="2">
+                        <field name="reason_id" />
                     </group>
                 </page>
             </xpath>
