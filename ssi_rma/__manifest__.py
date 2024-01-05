@@ -47,6 +47,7 @@
         "views/rma_operation.xml",
         "views/rma_policy_field_view.xml",
         "views/rma_policy_view.xml",
+        "views/rma_reason_views.xml",
         "views/rma_route_template_view.xml",
         "views/customer_rma_in_views.xml",
         "views/customer_rma_out_views.xml",

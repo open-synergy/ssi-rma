@@ -42,6 +42,18 @@
         />
     </record>
 
+    <record id="rma_reason_group" model="res.groups">
+        <field name="name">RMA Reason</field>
+        <field
+            name="category_id"
+            ref="ssi_stock.inventory_configurator_module_category"
+        />
+        <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+    </record>
+
     <!-- Configurator rma_policy_rule -->
     <record id="rma_policy_rule_group" model="res.groups">
         <field name="name">RMA Policy Rule</field>

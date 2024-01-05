@@ -75,6 +75,14 @@ class RMAMixin(models.AbstractModel):
             ("supplier", "Supplier"),
         ],
     )
+    reason_id = fields.Many2one(
+        comodel_name="rma_reason",
+        string="Reason",
+        required=True,
+        ondelete="restrict",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
     operation_id = fields.Many2one(
         comodel_name="rma_operation",
         string="Operation",
