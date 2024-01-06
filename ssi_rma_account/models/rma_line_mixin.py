@@ -126,6 +126,16 @@ class RMALineMixin(models.AbstractModel):
         tax_ids = self.product_id._get_product_tax(
             usage_code=self.order_id.usage_id.code
         )
+        if self.order_id.refund_pricelist_id:
+            product_context = dict(
+                self.env.context, uom=self.uom_id and self.uom_id.id or False
+            )
+            final_price, rule_id = self.order_id.refund_pricelist_id.with_context(
+                product_context
+            ).get_product_price_rule(self.product_id, self.uom_quantity or 1.0, False)
+            price = final_price
+        else:
+            price = self.price_unit
         data = {
             "move_id": move.id,
             "product_id": self.product_id.id,
@@ -133,7 +143,7 @@ class RMALineMixin(models.AbstractModel):
             "account_id": account.id,
             "quantity": self.uom_quantity,
             "product_uom_id": self.uom_id.id,
-            "price_unit": self.price_unit,
+            "price_unit": price,
             "tax_ids": [(6, 0, tax_ids)],
         }
         return data
