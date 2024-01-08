@@ -300,10 +300,13 @@ class RMALineMixin(models.AbstractModel):
 
             if quants:
                 quant = quants[-1]
-                self.price_unit = (
-                    quant.with_context(bypass_location_restriction=True).value
-                    / self.uom_quantity
-                )
+                try:
+                    self.price_unit = (
+                        quant.with_context(bypass_location_restriction=True).value
+                        / quant.quantity
+                    )
+                except ZeroDivisionError:
+                    self.price_unit = 0.0
         else:
             _super.onchange_price_unit()
 
