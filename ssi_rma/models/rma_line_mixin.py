@@ -284,12 +284,26 @@ class RMALineMixin(models.AbstractModel):
     def onchange_price_unit(self):
         _super = super(RMALineMixin, self)
         self.price_unit = 0.0
+        Quant = self.env["stock.quant"]
         if self.lot_id and self.uom_quantity and self.uom_quantity != 0.0:
-            self.price_unit = 7.0
-            if self.lot_id.quant_ids:
+            self.price_unit = 0.0
+            if self.order_id.type == "customer":
+                location = self.order_id.partner_id.property_stock_customer
+            else:
+                location = self.order_id.route_template_id.location_id
+            criteria = [
+                ("product_id", "=", self.product_id.id),
+                ("lot_id", "=", self.lot_id.id),
+                ("location_id", "=", location.id),
+            ]
+            quants = Quant.search(criteria)
 
-                quant = self.lot_id.quant_ids[-1]
-                self.price_unit = quant.value / self.uom_quantity
+            if quants:
+                quant = quants[-1]
+                self.price_unit = (
+                    quant.with_context(bypass_location_restriction=True).value
+                    / self.uom_quantity
+                )
         else:
             _super.onchange_price_unit()
 
