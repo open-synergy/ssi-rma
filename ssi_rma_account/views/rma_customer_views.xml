@@ -48,6 +48,7 @@
                     <group name="accounting_1" colspan="4" col="2">
                         <field name="journal_id" />
                         <field name="usage_id" />
+                        <field name="refund_pricelist_id" />
                         <field name="refund_ok" groups="base.group_no_one" />
                     </group>
                 </page>

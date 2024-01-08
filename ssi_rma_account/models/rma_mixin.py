@@ -31,6 +31,16 @@ class RMAMixin(models.AbstractModel):
             ],
         },
     )
+    refund_pricelist_id = fields.Many2one(
+        string="Refund Pricelist",
+        comodel_name="product.pricelist",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
+    )
     qty_to_refund = fields.Float(
         string="Qty To Refund",
         compute="_compute_qty_to_refund",
@@ -182,13 +192,18 @@ class RMAMixin(models.AbstractModel):
 
     def _prepare_refund_data(self):
         self.ensure_one()
+        currency = (
+            self.refund_pricelist_id
+            and self.refund_pricelist_id.currency_id
+            or self.company_id.currency_id
+        )
         return {
             "date": fields.Date.today(),
             "ref": self.name,
             "move_type": "out_refund",
             "journal_id": self.journal_id.id,  # TODO: Exception mechanism
             "partner_id": self.partner_id.id,
-            "currency_id": self.company_id.currency_id.id,
+            "currency_id": currency.id,
             "invoice_user_id": False,
             "invoice_date": fields.Date.today(),
             "invoice_date_due": fields.Date.today(),
