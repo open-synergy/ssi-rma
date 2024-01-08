@@ -19,7 +19,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_rma](ssi_rma/) | 14.0.1.5.0 |  | RMA
-[ssi_rma_account](ssi_rma_account/) | 14.0.1.0.0 |  | RMA + Accounting Integration
+[ssi_rma_account](ssi_rma_account/) | 14.0.1.1.0 |  | RMA + Accounting Integration
 
 [//]: # (end addons)
 
