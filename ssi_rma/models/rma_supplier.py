@@ -14,6 +14,11 @@ class RMASupplier(models.Model):
         string="Type",
         default="supplier",
     )
+    operation_id = fields.Many2one(
+        domain=[
+            ("direction", "=", "supplier"),
+        ],
+    )
     line_ids = fields.One2many(
         comodel_name="rma_supplier_line",
         inverse_name="order_id",

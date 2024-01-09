@@ -14,6 +14,11 @@ class RMACustomer(models.Model):
         string="Type",
         default="customer",
     )
+    operation_id = fields.Many2one(
+        domain=[
+            ("direction", "=", "customer"),
+        ],
+    )
     line_ids = fields.One2many(
         comodel_name="rma_customer_line",
         inverse_name="order_id",
