@@ -418,10 +418,16 @@ class RMALineMixin(models.AbstractModel):
         origin = self.order_id.name
         warehouse = self.order_id.route_template_id.outbound_warehouse_id
         route = self.order_id.route_template_id.outbound_route_id
-        location = (
-            self.order_id.route_template_id.partner_location_id
-            or self.order_id.partner_id.property_stock_customer
-        )
+        if self.order_id.type == "customer":
+            location = (
+                self.order_id.route_template_id.partner_location_id
+                or self.order_id.partner_id.property_stock_customer
+            )
+        else:
+            location = (
+                self.order_id.route_template_id.partner_location_id
+                or self.order_id.partner_id.property_stock_supplier
+            )
 
         result = {
             "name": self.order_id.name,
