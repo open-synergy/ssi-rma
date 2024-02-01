@@ -10,11 +10,11 @@
     <field name="view_mode">tree,form</field>
     <field
             name="domain"
-            eval="[('picking_type_category_id','=',ref('ssi_rma.picking_category_cro'))]"
+            eval="[('picking_type_category_id','=',ref('ssi_rma.picking_category_sro'))]"
         />
     <field
             name="context"
-            eval="{'default_picking_type_category_id':ref('ssi_rma.picking_category_cro')}"
+            eval="{'default_picking_type_category_id':ref('ssi_rma.picking_category_sro')}"
         />
 </record>
 
