@@ -58,7 +58,7 @@
                     position="after"
                 >
                 <page name="aml" string="Journal Items">
-                    <field name="account_move_line_ids" />
+                    <field name="account_move_line_ids" readonly="1" />
                 </page>
             </xpath>
             <xpath
@@ -98,6 +98,21 @@
                 <field name="refund_complete" />
             </xpath>
         </data>
+    </field>
+</record>
+
+<record id="rma_customer_view_form1" model="ir.ui.view">
+    <field name="name">RMA Customers - Form - Editable Journal Items</field>
+    <field name="model">rma_customer</field>
+    <field name="inherit_id" ref="ssi_rma_account.rma_customer_view_form" />
+    <field name="groups_id" eval="[(4, ref('base.group_system'))]" />
+    <field name="arch" type="xml">
+        <xpath
+                expr="//page[@name='aml']/field[@name='account_move_line_ids']"
+                position="attributes"
+            >
+            <attribute name="readonly">0</attribute>
+        </xpath>
     </field>
 </record>
 </odoo>
