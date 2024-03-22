@@ -14,5 +14,5 @@ class RMASupplier(models.Model):
     def _prepare_refund_data(self):
         _super = super(RMASupplier, self)
         result = _super._prepare_refund_data()
-        result["move_type"] == "in_refund"
+        result["move_type"] = "in_refund"
         return result
