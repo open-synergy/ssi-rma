@@ -116,6 +116,18 @@ class RMAMixin(models.AbstractModel):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    stock_move_ids = fields.Many2many(
+        string="Stock Moves",
+        comodel_name="stock.move",
+        compute="_compute_stock_document_ids",
+        store=False,
+    )
+    stock_picking_ids = fields.Many2many(
+        string="Stock Pickings",
+        comodel_name="stock.picking",
+        compute="_compute_stock_document_ids",
+        store=False,
+    )
     uom_quantity = fields.Float(
         string="UoM Quantity",
         compute="_compute_uom_quantity",
@@ -182,6 +194,17 @@ class RMAMixin(models.AbstractModel):
         compute="_compute_resolve_ok",
         store=True,
     )
+
+    @api.depends(
+        "line_ids",
+        "line_ids.stock_move_ids",
+    )
+    def _compute_stock_document_ids(self):
+        for record in self:
+            record.stock_move_ids = record.mapped("line_ids.stock_move_ids")
+            record.stock_picking_ids = record.mapped(
+                "line_ids.stock_move_ids.picking_id"
+            )
 
     @api.depends(
         "line_ids",
