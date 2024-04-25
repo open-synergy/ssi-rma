@@ -212,6 +212,10 @@
                         />
                         <field name="group_id" />
                     </group>
+                    <separator name="stock_picking" string="Stock Pickings" />
+                    <field name="stock_picking_ids" nolabel="1" />
+                    <separator name="stock_move" string="Stock Moves" />
+                    <field name="stock_move_ids" nolabel="1" />
                     <group
                         name="procurement_2"
                         colspan="4"
