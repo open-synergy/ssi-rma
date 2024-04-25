@@ -76,6 +76,22 @@ class RMAMixin(models.AbstractModel):
         compute="_compute_resolve_ok",
         store=True,
     )
+    stock_valuation_layer_ids = fields.Many2many(
+        string="Stock Valuation Layers",
+        comodel_name="stock.valuation.layer",
+        compute="_compute_stock_valuation_layer_ids",
+        store=False,
+    )
+
+    @api.depends(
+        "line_ids",
+        "line_ids.stock_move_ids",
+    )
+    def _compute_stock_valuation_layer_ids(self):
+        for record in self:
+            record.stock_valuation_layer_ids = record.mapped(
+                "line_ids.stock_move_ids.stock_valuation_layer_ids"
+            )
 
     @api.depends(
         "line_ids",

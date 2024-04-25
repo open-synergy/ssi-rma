@@ -34,6 +34,16 @@
             <xpath expr="//group[@name='quantity_1_2']" position="inside">
                 <field name="qty_refund" />
             </xpath>
+            <xpath expr="//group[@name='quantity_1_2']" position="inside">
+                <field name="qty_refund" />
+            </xpath>
+            <xpath
+                    expr="//page[@name='procurement']//field[@name='stock_move_ids']"
+                    position="after"
+                >
+                <separator name="svl" string="Stock Valuation Layers" />
+                <field name="stock_valuation_layer_ids" nolabel="1" />
+            </xpath>
             <xpath expr="//notebook/page[@name='procurement']" position="after">
                 <page name="accounting" string="Accounting">
                     <button
