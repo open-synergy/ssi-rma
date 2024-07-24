@@ -449,7 +449,7 @@ class RMALineMixin(models.AbstractModel):
                     "customer_rma_line_ids": [(4, self.id)],
                 }
             )
-        elif self._name == "rm_supplier_line":
+        elif self._name == "rma_supplier_line":
             result.update(
                 {
                     "supplier_rma_line_ids": [(4, self.id)],

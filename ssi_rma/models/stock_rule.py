@@ -14,6 +14,7 @@ class StockRule(models.Model):
         result = _super._get_custom_move_fields()
         result += [
             "customer_rma_line_ids",
+            "supplier_rma_line_ids",
             "price_unit",
             "forced_lot_id",
         ]
