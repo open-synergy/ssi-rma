@@ -61,7 +61,7 @@
                     <field name="date_due" />
                     <field name="route_template_id" />
                     <field name="group_id" />
-                    <separator />
+                    <separator name="need_receiption" />
                     <filter
                         name="need_reception"
                         string="Receiption Needed"
@@ -72,7 +72,7 @@
                         string="Receiption Not Needed"
                         domain="[('need_reception','=',0)]"
                     />
-                    <separator />
+                    <separator name="need_delivery" />
                     <filter
                         name="need_delivery"
                         string="Delivery Needed"
@@ -83,7 +83,7 @@
                         string="Delivery Not Needed"
                         domain="[('need_delivery','=',0)]"
                     />
-                    <separator />
+                    <separator name="reception_complete" />
                     <filter
                         name="reception_complete"
                         string="Reception Complete"
@@ -94,7 +94,7 @@
                         string="Reception Not Complete"
                         domain="[('reception_complete','=',0)]"
                     />
-                    <separator />
+                    <separator name="delivery_complete" />
                     <filter
                         name="delivery_complete"
                         string="Delivery Complete"
