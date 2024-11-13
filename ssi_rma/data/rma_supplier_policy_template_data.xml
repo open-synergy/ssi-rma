@@ -117,7 +117,10 @@ if not document.approval_template_id:
 </record>
 
 <!-- terminate -->
-<record id="rma_supplier_policy_template_detail_cancel" model="policy.template_detail">
+<record
+            id="rma_supplier_policy_template_detail_terminate"
+            model="policy.template_detail"
+        >
     <field name="template_id" ref="rma_supplier_policy_template" />
     <field
                 name="field_id"

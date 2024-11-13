@@ -394,6 +394,12 @@ class RMAMixin(models.AbstractModel):
         for record in self.sudo():
             record._create_delivery()
 
+    def action_recompute_resolution(self):
+        for record in self.sudo():
+            record._compute_resolve_ok()
+            if record.state == "open" and record.resolve_ok:
+                record.action_done()
+
     @ssi_decorator.post_open_action()
     def _create_procurement_group(self):
         self.ensure_one()
