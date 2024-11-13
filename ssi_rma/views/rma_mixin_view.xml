@@ -51,7 +51,62 @@
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//field[@name='user_id']" position='after'>
+                    <field name="operation_id" />
+                    <field name="partner_id" />
+                    <field name="contact_partner_id" />
+                    <field name="date" />
+                    <field name="duration_id" />
+                    <field name="date_due" />
+                    <field name="route_template_id" />
+                    <field name="group_id" />
+                    <separator />
+                    <filter
+                        name="need_reception"
+                        string="Receiption Needed"
+                        domain="[('need_reception','=',1)]"
+                    />
+                    <filter
+                        name="no_need_reception"
+                        string="Receiption Not Needed"
+                        domain="[('need_reception','=',0)]"
+                    />
+                    <separator />
+                    <filter
+                        name="need_delivery"
+                        string="Delivery Needed"
+                        domain="[('need_delivery','=',1)]"
+                    />
+                    <filter
+                        name="no_need_delivery"
+                        string="Delivery Not Needed"
+                        domain="[('need_delivery','=',0)]"
+                    />
+                    <separator />
+                    <filter
+                        name="reception_complete"
+                        string="Reception Complete"
+                        domain="[('reception_complete','=',1)]"
+                    />
+                    <filter
+                        name="reception_not_complete"
+                        string="Reception Not Complete"
+                        domain="[('reception_complete','=',0)]"
+                    />
+                    <separator />
+                    <filter
+                        name="delivery_complete"
+                        string="Delivery Complete"
+                        domain="[('delivery_complete','=',1)]"
+                    />
+                    <filter
+                        name="delivery_not_complete"
+                        string="Delivery Not Complete"
+                        domain="[('delivery_complete','=',0)]"
+                    />
+                </xpath>
+            </data>
         </field>
     </record>
 
