@@ -28,6 +28,15 @@
     <field name="inherit_id" ref="ssi_rma.rma_supplier_view_form" />
     <field name="arch" type="xml">
         <data>
+            <xpath expr="//field[@name='rma_state']" position="after">
+                <button
+                        name="%(link_journal_item_rma_line_action)d"
+                        type="action"
+                        help="Link To Journal Items"
+                        icon="fa-credit-card"
+                        attrs="{'invisible': [('rma_state','!=','open')]}"
+                    />
+            </xpath>
             <xpath expr="//group[@name='quantity_1_1']" position="inside">
                 <field name="qty_to_refund" />
             </xpath>
