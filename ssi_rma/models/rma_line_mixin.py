@@ -91,6 +91,9 @@ class RMALineMixin(models.AbstractModel):
         compute="_compute_reception_complete",
         store=True,
     )
+    rma_state = fields.Selection(
+        related="order_id.state",
+    )
 
     @api.model
     def _get_qty_field_trigger(self):

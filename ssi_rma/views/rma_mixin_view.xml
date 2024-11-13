@@ -109,6 +109,14 @@
                                 widget="percentage"
                             />
                             <field name="delivery_complete" invisible="1" />
+                            <field name="rma_state" invisible="1" />
+                            <button
+                                name="%(link_stock_move_rma_line_action)d"
+                                type="action"
+                                help="Link To Stock Move"
+                                icon="fa-link"
+                                attrs="{'invisible': [('rma_state','!=','open')]}"
+                            />
                         </tree>
                         <form>
                             <group name="form_detail" colspan="4" col="2">

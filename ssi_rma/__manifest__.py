@@ -41,6 +41,7 @@
         "data/ir_actions_server_data.xml",
         "data/base_automation_data.xml",
         "menu.xml",
+        "wizards/link_stock_move_rma_line_views.xml",
         "views/rma_mixin_view.xml",
         "views/rma_customer_view.xml",
         "views/rma_supplier_view.xml",
