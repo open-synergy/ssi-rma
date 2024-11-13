@@ -169,7 +169,7 @@
                                 name="%(link_stock_move_rma_line_action)d"
                                 type="action"
                                 help="Link To Stock Move"
-                                icon="fa-link"
+                                icon="fa-cubes"
                                 attrs="{'invisible': [('rma_state','!=','open')]}"
                             />
                         </tree>
@@ -223,6 +223,7 @@
                                     <field name="stock_move_ids" readonly="1" />
                                 </page>
                                 <page name="quantity" string="Quantities">
+
                                     <group name="quantity" colspan="4" col="3">
                                         <group name="quantity1" colspan="1" col="2">
                                             <field name="qty_to_receive" />
@@ -291,6 +292,14 @@
                     </group>
                 </page>
                 <page name="quantity" string="Quantity">
+                    <button
+                        name="action_recompute_resolution"
+                        type="object"
+                        string="Resolution"
+                        icon="fa-gear"
+                        attrs="{'invisible':[('state','!=','open')]}"
+                        class="oe_highlight"
+                    />
                     <group name="quantity_1" colspan="4" col="3">
                         <group name="quantity_1_1" colspan="1" col="2">
                             <field name="uom_quantity" />

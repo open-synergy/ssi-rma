@@ -15,6 +15,7 @@ class StockMove(models.Model):
         relation="rma_customer_line_stock_move_rel",
         column1="move_id",
         column2="line_id",
+        copy=False,
     )
     supplier_rma_line_ids = fields.Many2many(
         string="RMA Supplier Line",
@@ -22,4 +23,5 @@ class StockMove(models.Model):
         relation="rma_supplier_line_stock_move_rel",
         column1="move_id",
         column2="line_id",
+        copy=False,
     )

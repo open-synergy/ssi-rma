@@ -45,6 +45,11 @@ class LinkStockMoveRmaLine(models.TransientModel):
             criteria = [
                 ("product_id", "=", rma_line.product_id.id),
                 ("state", "=", "done"),
+                (
+                    "picking_id.partner_id.commercial_partner_id.id",
+                    "=",
+                    rma_line.order_id.partner_id.id,
+                ),
             ]
 
             if record.model_id.model == "rma_customer_line":
@@ -55,6 +60,7 @@ class LinkStockMoveRmaLine(models.TransientModel):
                     "ssi_rma.picking_category_cro"
                 ).id
                 criteria += [
+                    ("customer_rma_line_ids", "=", False),
                     "|",
                     (
                         "picking_id.picking_type_category_id.id",
@@ -75,6 +81,7 @@ class LinkStockMoveRmaLine(models.TransientModel):
                     "ssi_rma.picking_category_sro"
                 ).id
                 criteria += [
+                    ("supplier_rma_line_ids", "=", False),
                     "|",
                     (
                         "picking_id.picking_type_category_id.id",
