@@ -50,3 +50,38 @@ class RMAOperation(models.Model):
         string="Default Route Template",
         ondelete="restrict",
     )
+    source_picking_type_category_selection_method = fields.Selection(
+        default="domain",
+        selection=[("manual", "Manual"), ("domain", "Domain"), ("code", "Python Code")],
+        string="Source Picking Type Category Selection Method",
+        required=True,
+    )
+    source_picking_type_category_ids = fields.Many2many(
+        comodel_name="picking_type_category",
+        string="Source Picking Type Category",
+        relation="rel_rma_operation_2_source_picking_type_category",
+    )
+    source_picking_type_category_domain = fields.Text(
+        default="[]", string="Source Picking Type Category Domain"
+    )
+    source_picking_type_category_python_code = fields.Text(
+        default="result = []", string="Source Picking Type Category Python Code"
+    )
+
+    source_picking_type_selection_method = fields.Selection(
+        default="domain",
+        selection=[("manual", "Manual"), ("domain", "Domain"), ("code", "Python Code")],
+        string="Source Picking Type Selection Method",
+        required=True,
+    )
+    source_picking_type_ids = fields.Many2many(
+        comodel_name="stock.picking.type",
+        string="Source Picking Type",
+        relation="rel_rma_operation_2_source_picking_type",
+    )
+    source_picking_type_domain = fields.Text(
+        default="[]", string="Source Picking Type Domain"
+    )
+    source_picking_type_python_code = fields.Text(
+        default="result = []", string="Source Picking Type Python Code"
+    )

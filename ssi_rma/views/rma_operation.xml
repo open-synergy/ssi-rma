@@ -59,6 +59,66 @@
                             />
                         </group>
                     </page>
+                    <page name="source_picking" string="Source Picking">
+                        <group
+                            name="source_picking_type_category_1"
+                            col="2"
+                            colspan="4"
+                            string="Picking Type Category"
+                        >
+                            <field
+                                name="source_picking_type_category_selection_method"
+                                string="Selection Method"
+                            />
+                            <field
+                                name="source_picking_type_category_ids"
+                                attrs="{'invisible':[('source_picking_type_category_selection_method','!=','manual')]}"
+                                string="Picking Type Categories"
+                            />
+                            <field
+                                name="source_picking_type_category_domain"
+                                string="Domain"
+                                widget="domain"
+                                options="{'model': 'picking_type_category', 'in_dialog': True}"
+                                attrs="{'invisible':[('source_picking_type_category_selection_method','!=','domain')]}"
+                            />
+                            <field
+                                name="source_picking_type_category_python_code"
+                                string="Python Code"
+                                widget="ace"
+                                attrs="{'invisible':[('source_picking_type_category_selection_method','!=','code')]}"
+                            />
+                        </group>
+                        <group
+                            name="source_picking_type_1"
+                            col="2"
+                            colspan="4"
+                            string="Picking Type"
+                        >
+                            <field
+                                name="source_picking_type_selection_method"
+                                string="Selection Method"
+                            />
+                            <field
+                                name="source_picking_type_ids"
+                                string="Picking Types"
+                                attrs="{'invisible':[('source_picking_type_selection_method','!=','manual')]}"
+                            />
+                            <field
+                                name="source_picking_type_domain"
+                                string="Domain"
+                                widget="domain"
+                                options="{'model': 'stock.picking.type', 'in_dialog': True}"
+                                attrs="{'invisible':[('source_picking_type_selection_method','!=','domain')]}"
+                            />
+                            <field
+                                name="source_picking_type_python_code"
+                                string="Python Code"
+                                widget="ace"
+                                attrs="{'invisible':[('source_picking_type_selection_method','!=','code')]}"
+                            />
+                        </group>
+                    </page>
                 </xpath>
             </data>
         </field>
