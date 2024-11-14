@@ -22,6 +22,7 @@
         "ssi_product_line_price_mixin",
         "ssi_partner_mixin",
         "base_automation",
+        "ssi_m2o_configurator_mixin",
     ],
     "data": [
         "security/ir_module_category_data.xml",
