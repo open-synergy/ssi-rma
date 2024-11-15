@@ -76,6 +76,11 @@ class RMAMixin(models.AbstractModel):
             ("supplier", "Supplier"),
         ],
     )
+    source_picking_id = fields.Many2one(
+        comodel_name="stock.picking",
+        string="# Source Picking",
+        readonly=True,
+    )
     reason_id = fields.Many2one(
         comodel_name="rma_reason",
         string="Reason",
@@ -110,6 +115,12 @@ class RMAMixin(models.AbstractModel):
         string="Procurement Group",
         ondelete="restrict",
         readonly=True,
+    )
+    line_edit_ok = fields.Boolean(
+        string="Detail Edit Ok",
+        compute="_compute_line_edit_ok",
+        store=False,
+        compute_sudo=True,
     )
     line_ids = fields.One2many(
         comodel_name="rma_line_mixin",
@@ -209,6 +220,17 @@ class RMAMixin(models.AbstractModel):
         store=False,
         compute_sudo=True,
     )
+
+    @api.depends(
+        "source_picking_id",
+        "state",
+    )
+    def _compute_line_edit_ok(self):
+        for record in self:
+            result = False
+            if record.state == "draft" and not record.source_picking_id:
+                result = True
+            record.line_edit_ok = result
 
     @api.depends(
         "line_ids",
@@ -443,6 +465,19 @@ class RMAMixin(models.AbstractModel):
             record._compute_resolve_ok()
             if record.state == "open" and record.resolve_ok:
                 record.action_done()
+
+    def action_unlink_source_picking(self):
+        for record in self.sudo():
+            record._unlink_source_picking()
+
+    def _unlink_source_picking(self):
+        self.ensure_one()
+        self.write(
+            {
+                "source_picking_id": False,
+            }
+        )
+        self.line_ids.unlink()
 
     @ssi_decorator.post_open_action()
     def _create_procurement_group(self):

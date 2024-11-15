@@ -24,3 +24,5 @@ access_rma_supplier_line_all,rma_supplier_line - all,model_rma_supplier_line,,1,
 access_rma_supplier_line_viewer,rma_supplier_line - viewer,model_rma_supplier_line,rma_supplier_viewer_group,1,0,0,0
 access_rma_supplier_line_user,rma_supplier_line - user,model_rma_supplier_line,rma_supplier_user_group,1,1,1,1
 access_link_stock_move_rma_line_all,link_stock_move_rma_line - all,model_link_stock_move_rma_line,,1,1,1,1
+access_select_rma_source_picking_all,select_rma_source_picking - all,model_select_rma_source_picking,,1,1,1,1
+access_select_detail_rma_source_picking_all,select_rma_detail_source_picking - all,model_select_detail_rma_source_picking,,1,1,1,1

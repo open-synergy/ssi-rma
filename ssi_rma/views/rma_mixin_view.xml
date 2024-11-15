@@ -20,6 +20,7 @@
                     optional="hide"
                     widget="many2one_avatar"
                 />
+                <field name="source_picking_id" />
                 <field name="date" />
                 <field name="date_due" />
                 <field name="reason_id" />
@@ -56,6 +57,7 @@
                     <field name="operation_id" />
                     <field name="partner_id" />
                     <field name="contact_partner_id" />
+                    <field name="source_picking_id" />
                     <field name="date" />
                     <field name="duration_id" />
                     <field name="date_due" />
@@ -143,6 +145,28 @@
                     domain="[('id','in',allowed_contact_ids)]"
                     widget="many2one_avatar"
                 />
+                <label for="source_picking_id" />
+                <div>
+                    <field name="source_picking_id" />
+                    <button
+                        name="%(select_rma_source_picking_action)d"
+                        help="Link Source Picking"
+                        icon="fa-link"
+                        type="action"
+                        attrs="{'invisible':['|',('state','!=','draft'),'&amp;',('state','=','draft'),('source_picking_id','!=',False)]}"
+                        class="oe_highlight"
+                        style="margin-right:4px"
+                    />
+                    <button
+                        name="action_unlink_source_picking"
+                        help="Unlink Source Picking"
+                        icon="fa-unlink"
+                        type="object"
+                        attrs="{'invisible':['|',('state','!=','draft'),'&amp;',('state','=','draft'),('source_picking_id','=',False)]}"
+                        class="oe_highlight"
+                    />
+                </div>
+                <field name="line_edit_ok" invisible="1" />
             </xpath>
             <xpath expr="//group[@name='header_right']" position="inside">
                 <field name="date" />
@@ -151,7 +175,10 @@
             </xpath>
             <xpath expr="//page[1]" position="before">
                 <page name="detail" string="Details">
-                    <field name="line_ids">
+                    <field
+                        name="line_ids"
+                        attrs="{'readonly': [('line_edit_ok','=',False)]}"
+                    >
                         <tree>
                             <field name="sequence" widget="handle" />
                             <field name="product_id" />
@@ -187,6 +214,7 @@
                             <group name="form_detail" colspan="4" col="2">
                                 <group name="form_detail1" colspan="1" col="2">
                                     <field name="sequence" />
+                                    <field name="source_stock_move_id" />
                                     <field name="product_id" />
                                     <field name="name" />
                                     <field

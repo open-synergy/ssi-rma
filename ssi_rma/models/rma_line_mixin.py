@@ -28,6 +28,11 @@ class RMALineMixin(models.AbstractModel):
         store=False,
     )
     lot_id = fields.Many2one(comodel_name="stock.production.lot", string="Lot")
+    source_stock_move_id = fields.Many2one(
+        string="Source Stock Move",
+        comodel_name="stock.move",
+        readonly=True,
+    )
     stock_move_ids = fields.Many2many(
         comodel_name="stock.move",
         string="Stock Moves",
