@@ -4,4 +4,6 @@
 
 from . import (
     link_stock_move_rma_line,
+    select_rma_source_picking,
+    select_detail_rma_source_picking,
 )

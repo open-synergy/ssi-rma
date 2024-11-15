@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "installable": True,
     "depends": [
-        "ssi_stock",
+        "ssi_stock_account",
         "ssi_master_data_mixin",
         "ssi_transaction_confirm_mixin",
         "ssi_transaction_open_mixin",
@@ -22,6 +22,7 @@
         "ssi_product_line_price_mixin",
         "ssi_partner_mixin",
         "base_automation",
+        "ssi_m2o_configurator_mixin",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -42,6 +43,7 @@
         "data/base_automation_data.xml",
         "menu.xml",
         "wizards/link_stock_move_rma_line_views.xml",
+        "wizards/select_rma_source_picking_views.xml",
         "views/rma_mixin_view.xml",
         "views/rma_customer_view.xml",
         "views/rma_supplier_view.xml",

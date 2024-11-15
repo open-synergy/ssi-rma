@@ -19,6 +19,7 @@ class RMAMixin(models.AbstractModel):
         "mixin.transaction_confirm",
         "mixin.transaction_partner",
         "mixin.transaction_date_due",
+        "mixin.many2one_configurator",
     ]
 
     # Multiple Approval Attribute
@@ -75,6 +76,11 @@ class RMAMixin(models.AbstractModel):
             ("supplier", "Supplier"),
         ],
     )
+    source_picking_id = fields.Many2one(
+        comodel_name="stock.picking",
+        string="# Source Picking",
+        readonly=True,
+    )
     reason_id = fields.Many2one(
         comodel_name="rma_reason",
         string="Reason",
@@ -109,6 +115,12 @@ class RMAMixin(models.AbstractModel):
         string="Procurement Group",
         ondelete="restrict",
         readonly=True,
+    )
+    line_edit_ok = fields.Boolean(
+        string="Detail Edit Ok",
+        compute="_compute_line_edit_ok",
+        store=False,
+        compute_sudo=True,
     )
     line_ids = fields.One2many(
         comodel_name="rma_line_mixin",
@@ -194,6 +206,31 @@ class RMAMixin(models.AbstractModel):
         compute="_compute_resolve_ok",
         store=True,
     )
+    allowed_source_picking_type_category_ids = fields.Many2many(
+        comodel_name="picking_type_category",
+        string="Allowed Source Picking Type Category",
+        compute="_compute_allowed_source_picking_type_category_ids",
+        store=False,
+        compute_sudo=True,
+    )
+    allowed_source_picking_type_ids = fields.Many2many(
+        comodel_name="stock.picking.type",
+        string="Allowed Source Picking Type",
+        compute="_compute_allowed_source_picking_type_ids",
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends(
+        "source_picking_id",
+        "state",
+    )
+    def _compute_line_edit_ok(self):
+        for record in self:
+            result = False
+            if record.state == "draft" and not record.source_picking_id:
+                result = True
+            record.line_edit_ok = result
 
     @api.depends(
         "line_ids",
@@ -380,6 +417,35 @@ class RMAMixin(models.AbstractModel):
                 result = True
             record.deliver_ok = result
 
+    @api.depends("operation_id")
+    def _compute_allowed_source_picking_type_category_ids(self):
+        for record in self:
+            result = False
+            if record.operation_id:
+                operation = record.operation_id
+                result = record._m2o_configurator_get_filter(
+                    object_name="picking_type_category",
+                    method_selection=operation.source_picking_type_category_selection_method,
+                    manual_recordset=operation.source_picking_type_category_ids,
+                    domain=operation.source_picking_type_category_domain,
+                    python_code=operation.source_picking_type_category_python_code,
+                )
+            record.allowed_source_picking_type_category_ids = result
+
+    @api.depends("operation_id")
+    def _compute_allowed_source_picking_type_ids(self):
+        for record in self:
+            result = False
+            if record.operation_id:
+                result = record._m2o_configurator_get_filter(
+                    object_name="stock.picking.type",
+                    method_selection=record.operation_id.source_picking_type_selection_method,
+                    manual_recordset=record.operation_id.source_picking_type_ids,
+                    domain=record.operation_id.source_picking_type_domain,
+                    python_code=record.operation_id.source_picking_type_python_code,
+                )
+            record.allowed_source_picking_type_ids = result
+
     @api.onchange("operation_id")
     def onchange_route_template_id(self):
         self.route_template_id = False
@@ -399,6 +465,19 @@ class RMAMixin(models.AbstractModel):
             record._compute_resolve_ok()
             if record.state == "open" and record.resolve_ok:
                 record.action_done()
+
+    def action_unlink_source_picking(self):
+        for record in self.sudo():
+            record._unlink_source_picking()
+
+    def _unlink_source_picking(self):
+        self.ensure_one()
+        self.write(
+            {
+                "source_picking_id": False,
+            }
+        )
+        self.line_ids.unlink()
 
     @ssi_decorator.post_open_action()
     def _create_procurement_group(self):
