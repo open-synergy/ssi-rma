@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo14-addon-ssi_rma',
         'odoo14-addon-ssi_rma_account',
+        'odoo14-addon-ssi_rma_sale',
     ],
     classifiers=[
         'Programming Language :: Python',
