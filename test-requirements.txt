@@ -25,3 +25,4 @@ git+https://github.com/open-synergy/ssi-financial-accounting@14.0#subdirectory=s
 git+https://github.com/open-synergy/opnsynid-account-voucher@14.0#subdirectory=setup/ssi_voucher_mixin
 git+https://github.com/open-synergy/opnsynid-account-voucher@14.0#subdirectory=setup/ssi_voucher_bank_cash
 git+https://github.com/open-synergy/opnsynid-account-voucher@14.0#subdirectory=setup/ssi_voucher_cheque
+git+https://github.com/open-synergy/ssi-sale@14.0#subdirectory=setup/ssi_sale
