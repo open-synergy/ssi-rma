@@ -452,6 +452,16 @@ class RMAMixin(models.AbstractModel):
         if self.operation_id:
             self.route_template_id = self.operation_id.default_route_template_id.id
 
+    def action_open_reception(self):
+        for record in self.sudo():
+            result = record._open_reception()
+        return result
+
+    def action_open_delivery(self):
+        for record in self.sudo():
+            result = record._open_delivery()
+        return result
+
     def action_create_reception(self):
         for record in self.sudo():
             record._create_reception()
@@ -478,6 +488,36 @@ class RMAMixin(models.AbstractModel):
             }
         )
         self.line_ids.unlink()
+
+    def _open_reception(self):
+        self.ensure_one()
+        rma_customer_in = self.env.ref("ssi_rma.picking_category_cri")
+        pickings = self.stock_picking_ids.filtered(
+            lambda r: r.picking_type_category_id.id == rma_customer_in.id
+        )
+        waction = self.env.ref("ssi_rma.customer_rma_in_action").read()[0]
+        waction.update(
+            {
+                "view_mode": "tree,form",
+                "domain": [("id", "in", pickings.ids)],
+            }
+        )
+        return waction
+
+    def _open_delivery(self):
+        self.ensure_one()
+        rma_customer_out = self.env.ref("ssi_rma.picking_category_cro")
+        pickings = self.stock_picking_ids.filtered(
+            lambda r: r.picking_type_category_id.id == rma_customer_out.id
+        )
+        waction = self.env.ref("ssi_rma.customer_rma_out_action").read()[0]
+        waction.update(
+            {
+                "view_mode": "tree,form",
+                "domain": [("id", "in", pickings.ids)],
+            }
+        )
+        return waction
 
     @ssi_decorator.post_open_action()
     def _create_procurement_group(self):
