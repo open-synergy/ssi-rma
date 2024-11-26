@@ -94,7 +94,12 @@
                     <filter
                         name="reception_not_complete"
                         string="Reception Not Complete"
-                        domain="[('reception_complete','=',0)]"
+                        domain="[('reception_complete','=',0),('percent_reception','&lt;',1.0)]"
+                    />
+                    <filter
+                        name="over_receipt"
+                        string="Over Receipt"
+                        domain="[('reception_complete','=',0),('percent_reception','&gt;',1.0)]"
                     />
                     <separator name="delivery_complete" />
                     <filter
@@ -105,7 +110,12 @@
                     <filter
                         name="delivery_not_complete"
                         string="Delivery Not Complete"
-                        domain="[('delivery_complete','=',0)]"
+                        domain="[('delivery_complete','=',0),('percent_delivery','&lt;',1.0)]"
+                    />
+                    <filter
+                        name="over_deliver"
+                        string="Over Deliver"
+                        domain="[('delivery_complete','=',0),('percent_delivery','&gt;',1)]"
                     />
                 </xpath>
             </data>
