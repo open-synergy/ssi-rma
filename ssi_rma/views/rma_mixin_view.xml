@@ -152,6 +152,7 @@
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="type" invisible="1" />
                 <field name="operation_id" />
+                <field name="reason_id" />
                 <field
                     name="allowed_source_picking_type_category_ids"
                     widget="many2many_tags"
@@ -384,11 +385,6 @@
                             <field name="need_delivery" />
                             <field name="reception_complete" />
                         </group>
-                    </group>
-                </page>
-                <page name="other" string="Other Info">
-                    <group name="other_1" colspan="4" col="2">
-                        <field name="reason_id" />
                     </group>
                 </page>
             </xpath>
