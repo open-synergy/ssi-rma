@@ -133,12 +133,26 @@ class RMAMixin(models.AbstractModel):
         comodel_name="stock.move",
         compute="_compute_stock_document_ids",
         store=False,
+        compute_sudo=True,
     )
     stock_picking_ids = fields.Many2many(
         string="Stock Pickings",
         comodel_name="stock.picking",
         compute="_compute_stock_document_ids",
         store=False,
+        compute_sudo=True,
+    )
+    num_of_reception = fields.Integer(
+        string="Num. of Reception",
+        compute="_compute_stock_document_ids",
+        store=True,
+        compute_sudo=True,
+    )
+    num_of_delivery = fields.Integer(
+        string="Num. of Delivery",
+        compute="_compute_stock_document_ids",
+        store=True,
+        compute_sudo=True,
     )
     uom_quantity = fields.Float(
         string="UoM Quantity",
@@ -235,13 +249,26 @@ class RMAMixin(models.AbstractModel):
     @api.depends(
         "line_ids",
         "line_ids.stock_move_ids",
+        "line_ids.stock_move_ids.picking_id.state",
     )
     def _compute_stock_document_ids(self):
         for record in self:
+            num_reception = num_delivery = 0
+            rma_customer_in = self.env.ref("ssi_rma.picking_category_cri")
+            rma_customer_out = self.env.ref("ssi_rma.picking_category_cro")
             record.stock_move_ids = record.mapped("line_ids.stock_move_ids")
             record.stock_picking_ids = record.mapped(
                 "line_ids.stock_move_ids.picking_id"
             )
+            for picking in record.stock_picking_ids.filtered(
+                lambda r: r.state == "done"
+            ):
+                if picking.picking_type_category_id == rma_customer_in:
+                    num_reception += 1
+                elif picking.picking_type_category_id == rma_customer_out:
+                    num_delivery += 1
+            record.num_of_reception = num_reception
+            record.num_of_delivery = num_delivery
 
     @api.depends(
         "line_ids",
@@ -452,6 +479,16 @@ class RMAMixin(models.AbstractModel):
         if self.operation_id:
             self.route_template_id = self.operation_id.default_route_template_id.id
 
+    def action_open_reception(self):
+        for record in self.sudo():
+            result = record._open_reception()
+        return result
+
+    def action_open_delivery(self):
+        for record in self.sudo():
+            result = record._open_delivery()
+        return result
+
     def action_create_reception(self):
         for record in self.sudo():
             record._create_reception()
@@ -478,6 +515,36 @@ class RMAMixin(models.AbstractModel):
             }
         )
         self.line_ids.unlink()
+
+    def _open_reception(self):
+        self.ensure_one()
+        rma_customer_in = self.env.ref("ssi_rma.picking_category_cri")
+        pickings = self.stock_picking_ids.filtered(
+            lambda r: r.picking_type_category_id.id == rma_customer_in.id
+        )
+        waction = self.env.ref("ssi_rma.customer_rma_in_action").read()[0]
+        waction.update(
+            {
+                "view_mode": "tree,form",
+                "domain": [("id", "in", pickings.ids)],
+            }
+        )
+        return waction
+
+    def _open_delivery(self):
+        self.ensure_one()
+        rma_customer_out = self.env.ref("ssi_rma.picking_category_cro")
+        pickings = self.stock_picking_ids.filtered(
+            lambda r: r.picking_type_category_id.id == rma_customer_out.id
+        )
+        waction = self.env.ref("ssi_rma.customer_rma_out_action").read()[0]
+        waction.update(
+            {
+                "view_mode": "tree,form",
+                "domain": [("id", "in", pickings.ids)],
+            }
+        )
+        return waction
 
     @ssi_decorator.post_open_action()
     def _create_procurement_group(self):
