@@ -12,7 +12,7 @@ class RMALineMixin(models.AbstractModel):
     ]
 
     account_move_line_ids = fields.Many2many(
-        strng="Journal Item",
+        string="Journal Item",
         comodel_name="account.move.line",
     )
     qty_to_refund = fields.Float(

@@ -82,6 +82,19 @@ class RMAMixin(models.AbstractModel):
         compute="_compute_stock_valuation_layer_ids",
         store=False,
     )
+    refund_ids = fields.Many2many(
+        string="Refunds",
+        comodel_name="account.move",
+        compute="_compute_refund_document_ids",
+        store=False,
+        compute_sudo=True,
+    )
+    num_of_refund = fields.Integer(
+        string="Num. of Refund",
+        compute="_compute_refund_document_ids",
+        store=True,
+        compute_sudo=True,
+    )
 
     @api.depends(
         "line_ids",
@@ -92,6 +105,21 @@ class RMAMixin(models.AbstractModel):
             record.stock_valuation_layer_ids = record.mapped(
                 "line_ids.stock_move_ids.stock_valuation_layer_ids"
             )
+
+    @api.depends(
+        "line_ids",
+        "line_ids.account_move_line_ids",
+        "line_ids.account_move_line_ids.move_id",
+        "line_ids.account_move_line_ids.move_id.state",
+    )
+    def _compute_refund_document_ids(self):
+        for record in self:
+            num_of_refund = 0
+            record.refund_ids = record.mapped("line_ids.account_move_line_ids.move_id")
+            num_of_refund = len(
+                record.refund_ids.filtered(lambda r: r.state == "posted")
+            )
+            record.num_of_refund = num_of_refund
 
     @api.depends(
         "line_ids",
@@ -197,6 +225,25 @@ class RMAMixin(models.AbstractModel):
     def action_create_refund(self):
         for record in self.sudo():
             record._create_refund()
+
+    def action_open_refund(self):
+        for record in self.sudo():
+            result = record._open_refund()
+        return result
+
+    def _open_refund(self):
+        self.ensure_one()
+        if self._name == "rma_customer":
+            waction = self.env.ref("account.action_move_out_refund_type").read()[0]
+        elif self._name == "rma_supplier":
+            waction = self.env.ref("account.action_move_in_refund_type").read()[0]
+
+        waction.update(
+            {
+                "domain": [("id", "in", self.refund_ids.ids)],
+            }
+        )
+        return waction
 
     def _create_refund(self):
         self.ensure_one()
