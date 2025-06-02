@@ -10,9 +10,6 @@
     <field name="code">T001</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="receipt_policy_ok" eval="1" />
-    <field name="delivery_policy_ok" eval="1" />
-    <field name="rma_supplier_policy_ok" eval="1" />
 </record>
 
 <record id="rma_policy_ordered_received" model="rma_policy">
@@ -20,7 +17,6 @@
     <field name="code">T002</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="receipt_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_ordered_received_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />
@@ -40,7 +36,6 @@
     <field name="code">T003</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="receipt_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_delivered_received_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />
@@ -60,7 +55,6 @@
     <field name="code">T004</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="delivery_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_ordered_delivered_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />
@@ -79,7 +73,6 @@
     <field name="code">T005</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="delivery_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_received_delivered_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />
@@ -100,7 +93,6 @@
     <field name="code">T006</field>
     <field name="active" eval="1" />
     <field name="rma_type">customer</field>
-    <field name="rma_supplier_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_rma_delivered_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />

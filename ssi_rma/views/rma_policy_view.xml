@@ -41,9 +41,6 @@
             <data>
                 <xpath expr="//field[@name='active']" position="after">
                     <field name="rma_type" />
-                    <field name="receipt_policy_ok" />
-                    <field name="delivery_policy_ok" />
-                    <field name="rma_supplier_policy_ok" />
                 </xpath>
                 <xpath expr="//page[1]" position="before">
                     <page name="rule" string="Rules">
