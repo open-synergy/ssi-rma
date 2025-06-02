@@ -171,11 +171,6 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_rma_account
-#: model:ir.model.fields,field_description:ssi_rma_account.field_rma_policy__refund_policy_ok
-msgid "Available on Refund Policy"
-msgstr ""
-
-#. module: ssi_rma_account
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__approve_ok
 msgid "Can Approve"
 msgstr ""
