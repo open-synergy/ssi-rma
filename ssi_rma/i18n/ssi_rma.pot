@@ -287,21 +287,6 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_rma
-#: model:ir.model.fields,field_description:ssi_rma.field_rma_policy__delivery_policy_ok
-msgid "Available on Delivery Policy"
-msgstr ""
-
-#. module: ssi_rma
-#: model:ir.model.fields,field_description:ssi_rma.field_rma_policy__rma_supplier_policy_ok
-msgid "Available on RMA to Supplier"
-msgstr ""
-
-#. module: ssi_rma
-#: model:ir.model.fields,field_description:ssi_rma.field_rma_policy__receipt_policy_ok
-msgid "Available on Receipt Policy"
-msgstr ""
-
-#. module: ssi_rma
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_policy__rma_type__both
 msgid "Both"
 msgstr ""
