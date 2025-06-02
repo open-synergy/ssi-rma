@@ -22,21 +22,18 @@ class RMAOperation(models.Model):
     receipt_policy_id = fields.Many2one(
         comodel_name="rma_policy",
         string="Receipt Policy",
-        domain="[('receipt_policy_ok', '=', True)]",
         required=True,
         ondelete="restrict",
     )
     delivery_policy_id = fields.Many2one(
         comodel_name="rma_policy",
         string="Delivery Policy",
-        domain="[('delivery_policy_ok', '=', True)]",
         required=True,
         ondelete="restrict",
     )
     rma_supplier_policy_id = fields.Many2one(
         comodel_name="rma_policy",
         string="RMA Supplier Policy",
-        domain="[('rma_supplier_policy_ok', '=', True)]",
         required=True,
         ondelete="restrict",
     )

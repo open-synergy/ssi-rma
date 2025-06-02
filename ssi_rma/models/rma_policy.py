@@ -20,15 +20,6 @@ class RMAPolicy(models.Model):
         required=True,
         default="customer",
     )
-    receipt_policy_ok = fields.Boolean(
-        string="Available on Receipt Policy",
-    )
-    delivery_policy_ok = fields.Boolean(
-        string="Available on Delivery Policy",
-    )
-    rma_supplier_policy_ok = fields.Boolean(
-        string="Available on RMA to Supplier",
-    )
     rule_ids = fields.One2many(
         comodel_name="rma_policy_rule", inverse_name="policy_id", string="Rules"
     )
