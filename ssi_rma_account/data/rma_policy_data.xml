@@ -9,7 +9,6 @@
     <field name="code">T007</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="refund_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_ordered_refunded_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />
@@ -29,7 +28,6 @@
     <field name="code">T008</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="refund_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_delivered_refunded_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />
@@ -49,7 +47,6 @@
     <field name="code">T009</field>
     <field name="active" eval="1" />
     <field name="rma_type">both</field>
-    <field name="refund_policy_ok" eval="1" />
 </record>
 <record id="rma_policy_rule_received_refunded_1" model="rma_policy_rule">
     <field name="sequence" eval="1" />

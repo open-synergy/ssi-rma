@@ -12,7 +12,6 @@ class RMAOperation(models.Model):
     refund_policy_id = fields.Many2one(
         comodel_name="rma_policy",
         string="Refund Policy",
-        domain="[('refund_policy_ok', '=', True)]",
         required=False,
         ondelete="restrict",
     )
