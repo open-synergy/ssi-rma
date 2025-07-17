@@ -55,6 +55,7 @@ class RMACustomerLine(models.Model):
             result.update(
                 {
                     "price_unit": sale_line_id.price_unit,
+                    "tax_ids": [(6, 0, sale_line_id.tax_id.ids)],
                 }
             )
         return result
