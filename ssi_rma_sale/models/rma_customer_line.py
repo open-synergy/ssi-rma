@@ -46,3 +46,16 @@ class RMACustomerLine(models.Model):
             }
         )
         return result
+
+    def _prepare_refund_line(self):
+        _super = super(RMACustomerLine, self)
+        result = _super._prepare_refund_line()
+        sale_line_id = self.sale_line_id and self.sale_line_id.id or False
+        if sale_line_id:
+            result.update(
+                {
+                    "price_unit": sale_line_id.price_unit,
+                    "tax_ids": [(6, 0, sale_line_id.tax_id.ids)],
+                }
+            )
+        return result
