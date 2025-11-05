@@ -50,7 +50,7 @@ class RMACustomerLine(models.Model):
     def _prepare_refund_line(self, move):
         _super = super(RMACustomerLine, self)
         result = _super._prepare_refund_line(move)
-        sale_line_id = self.sale_line_id and self.sale_line_id.id or False
+        sale_line_id = self.sale_line_id
         if sale_line_id:
             result.update(
                 {
