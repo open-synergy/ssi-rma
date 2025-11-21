@@ -3,7 +3,6 @@
      Copyright 2023 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-<data>
 <!-- RMA Customer -->
 <record id="stock_route_demo1" model="stock.location.route">
     <field name="name">RMA Outbound - (test)</field>
@@ -69,5 +68,4 @@
     <field name="group_propagation_option">propagate</field>
     <field name="propagate_cancel" eval="1" />
 </record>
-</data>
 </odoo>

@@ -3,7 +3,6 @@
      Copyright 2023 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-<data>
 <record id="rma_operation_demo1" model="rma_operation">
     <field name="name">Replace After Receive</field>
     <field name="active" eval="1" />
@@ -13,9 +12,9 @@
     <field name="rma_supplier_policy_id" ref="rma_policy_no" />
     <field name="direction">customer</field>
     <field
-                name="allowed_route_template_ids"
-                eval="[(6, 0, [ref('rma_route_template_demo1')])]"
-            />
+            name="allowed_route_template_ids"
+            eval="[(6, 0, [ref('rma_route_template_demo1')])]"
+        />
 </record>
 
 <record id="rma_operation_demo2" model="rma_operation">
@@ -77,5 +76,4 @@
     <field name="rma_supplier_policy_id" ref="rma_policy_no" />
     <field name="direction">supplier</field>
 </record>
-</data>
 </odoo>

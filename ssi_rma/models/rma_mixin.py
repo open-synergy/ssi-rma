@@ -235,6 +235,24 @@ class RMAMixin(models.AbstractModel):
         compute_sudo=True,
     )
 
+    # Additional policy fields
+    create_reception_ok = fields.Boolean(
+        string="Can Create Reception",
+        compute="_compute_policy",
+        compute_sudo=True,
+        help="""Create Reception Policy
+
+* if active user can see and execute 'Create Reception' button""",
+    )
+    create_delivery_ok = fields.Boolean(
+        string="Can Create Delivery",
+        compute="_compute_policy",
+        compute_sudo=True,
+        help="""Create Delivery Policy
+
+* if active user can see and execute 'Create Delivery' button""",
+    )
+
     @api.depends(
         "source_picking_id",
         "state",
@@ -597,6 +615,8 @@ class RMAMixin(models.AbstractModel):
             "restart_ok",
             "restart_approval_ok",
             "manual_number_ok",
+            "create_reception_ok",
+            "create_delivery_ok",
         ]
         res += policy_field
         return res
