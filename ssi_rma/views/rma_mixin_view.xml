@@ -329,7 +329,7 @@
                         string="Create Reception"
                         class="oe_highlight"
                         icon="fa-sign-in"
-                        attrs="{'invisible':[('receipt_ok','=',False)]}"
+                        attrs="{'invisible':[('create_reception_ok','=',False)]}"
                         style="margin-right:4px"
                     />
                     <button
@@ -338,7 +338,7 @@
                         string="Create Delivery"
                         class="oe_highlight"
                         icon="fa-sign-out"
-                        attrs="{'invisible':[('deliver_ok','=',False)]}"
+                        attrs="{'invisible':[('create_delivery_ok','=',False)]}"
                         style="margin-right:4px"
                     />
                     <group name="procurement_1" colspan="4" col="2">
@@ -397,6 +397,10 @@
                         </group>
                     </group>
                 </page>
+            </xpath>
+            <xpath expr="//field[@name='manual_number_ok']" position="after">
+                <field name="create_reception_ok" />
+                <field name="create_delivery_ok" />
             </xpath>
         </field>
     </record>

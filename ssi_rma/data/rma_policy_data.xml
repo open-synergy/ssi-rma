@@ -3,7 +3,6 @@
      Copyright 2023 PT. Simetri Sinergi Indonesia
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-<data>
 <!-- All -->
 <record id="rma_policy_no" model="rma_policy">
     <field name="name">Not Required</field>
@@ -106,5 +105,4 @@
     <field name="policy_field_id" ref="rma_policy_field_delivered" />
     <field name="policy_id" ref="rma_policy_rma_delivered" />
 </record>
-</data>
 </odoo>
