@@ -71,7 +71,7 @@
                             name="action_create_refund"
                             type="object"
                             string="Create Refund"
-                            attrs="{'invisible':[('refund_ok','=',False)]}"
+                            attrs="{'invisible':[('create_refund_ok','=',False)]}"
                             class="oe_highlight"
                             icon="fa-credit-card"
                             style="margin-right:4px"
@@ -120,6 +120,9 @@
             <xpath expr="//group[@name='quantity_1_3']" position="inside">
                 <field name="percent_refund" widget="percentage" />
                 <field name="need_refund" />
+            </xpath>
+            <xpath expr="//field[@name='create_delivery_ok']" position="after">
+                <field name="create_refund_ok" />
             </xpath>
         </data>
     </field>
