@@ -95,6 +95,15 @@ class RMAMixin(models.AbstractModel):
         store=True,
         compute_sudo=True,
     )
+    # Additional policy fields
+    create_refund_ok = fields.Boolean(
+        string="Can Create Refund",
+        compute="_compute_policy",
+        compute_sudo=True,
+        help="""Create Refund Policy
+
+* if active user can see and execute 'Create Refund' button""",
+    )
 
     @api.depends(
         "line_ids",
@@ -273,3 +282,12 @@ class RMAMixin(models.AbstractModel):
             "invoice_origin": self.name,
             "invoice_payment_term_id": False,
         }
+
+    @api.model
+    def _get_policy_field(self):
+        res = super(RMAMixin, self)._get_policy_field()
+        policy_field = [
+            "create_refund_ok",
+        ]
+        res += policy_field
+        return res
