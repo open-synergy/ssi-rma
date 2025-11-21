@@ -18,10 +18,10 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_rma](ssi_rma/) | 14.0.2.4.0 |  | RMA
-[ssi_rma_account](ssi_rma_account/) | 14.0.1.7.0 |  | RMA + Accounting Integration
-[ssi_rma_purchase](ssi_rma_purchase/) | 14.0.1.0.1 |  | RMA + Purchase Integration
-[ssi_rma_sale](ssi_rma_sale/) | 14.0.1.1.2 |  | RMA + Sale Integration
+[ssi_rma](ssi_rma/) | 14.0.2.5.0 |  | RMA
+[ssi_rma_account](ssi_rma_account/) | 14.0.1.8.0 |  | RMA + Accounting Integration
+[ssi_rma_purchase](ssi_rma_purchase/) | 14.0.1.1.0 |  | RMA + Purchase Integration
+[ssi_rma_sale](ssi_rma_sale/) | 14.0.1.2.0 |  | RMA + Sale Integration
 
 [//]: # (end addons)
 
