@@ -14,6 +14,7 @@ class RMASupplierLine(models.Model):
     ]
 
     account_move_line_ids = fields.Many2many(
+        comodel_name="account.move.line",
         relation="rel_rma_supplier_line_2_aml",
         column1="rma_line_id",
         column2="account_move_line_id",

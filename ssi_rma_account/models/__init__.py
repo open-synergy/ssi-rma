@@ -10,4 +10,5 @@ from . import (  # noqa: F401
     rma_line_mixin,
     rma_customer_line,
     rma_supplier_line,
+    account_move_line,
 )
