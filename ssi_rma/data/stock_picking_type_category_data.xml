@@ -20,6 +20,7 @@
             name="allowed_destination_location_type_ids"
             eval="[(6, 0, [ref('location_type_rma')])]"
         />
+    <field name="module_categ_id" ref="customer_rma_in_workflow_module_category" />
 </record>
 
 <record id="picking_category_cro" model="picking_type_category">
@@ -39,6 +40,7 @@
             name="allowed_destination_location_type_ids"
             eval="[(6, 0, [ref('ssi_stock.location_type_customer')])]"
         />
+    <field name="module_categ_id" ref="customer_rma_out_workflow_module_category" />
 </record>
 
 <record id="picking_category_sri" model="picking_type_category">
@@ -58,6 +60,7 @@
             name="allowed_destination_location_type_ids"
             eval="[(6, 0, [ref('location_type_rma')])]"
         />
+    <field name="module_categ_id" ref="supplier_rma_in_workflow_module_category" />
 </record>
 
 <record id="picking_category_sro" model="picking_type_category">
@@ -77,5 +80,6 @@
             name="allowed_destination_location_type_ids"
             eval="[(6, 0, [ref('ssi_stock.location_type_supplier')])]"
         />
+    <field name="module_categ_id" ref="supplier_rma_out_workflow_module_category" />
 </record>
 </odoo>
