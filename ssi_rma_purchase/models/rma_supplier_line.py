@@ -18,7 +18,7 @@ class RMASupplierLine(models.Model):
     )
 
     def _get_receipt_procurement_data(self):
-        _super = super(RMASupplierLine, self)
+        _super = super()
         result = _super._get_receipt_procurement_data()
         purchase_line_id = self.purchase_line_id and self.purchase_line_id.id or False
         to_refund = purchase_line_id and True or False
@@ -35,7 +35,7 @@ class RMASupplierLine(models.Model):
         return result
 
     def _get_delivery_procurement_data(self):
-        _super = super(RMASupplierLine, self)
+        _super = super()
         result = _super._get_delivery_procurement_data()
         purchase_line_id = self.purchase_line_id and self.purchase_line_id.id or False
 

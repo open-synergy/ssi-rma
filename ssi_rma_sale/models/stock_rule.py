@@ -10,7 +10,7 @@ class StockRule(models.Model):
     _inherit = ["stock.rule"]
 
     def _get_custom_move_fields(self):
-        _super = super(StockRule, self)
+        _super = super()
         result = _super._get_custom_move_fields()
         result += [
             "to_refund",

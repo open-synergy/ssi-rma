@@ -18,7 +18,7 @@ class RMACustomerLine(models.Model):
     )
 
     def _get_receipt_procurement_data(self):
-        _super = super(RMACustomerLine, self)
+        _super = super()
         result = _super._get_receipt_procurement_data()
         sale_line_id = self.sale_line_id and self.sale_line_id.id or False
         to_refund = sale_line_id and True or False
@@ -31,7 +31,7 @@ class RMACustomerLine(models.Model):
         return result
 
     def _get_delivery_procurement_data(self):
-        _super = super(RMACustomerLine, self)
+        _super = super()
         result = _super._get_delivery_procurement_data()
         sale_line_id = self.sale_line_id and self.sale_line_id.id or False
         source_stock_move_id = (
@@ -48,7 +48,7 @@ class RMACustomerLine(models.Model):
         return result
 
     def _prepare_refund_line(self, move):
-        _super = super(RMACustomerLine, self)
+        _super = super()
         result = _super._prepare_refund_line(move)
         sale_line_id = self.sale_line_id
         if sale_line_id:

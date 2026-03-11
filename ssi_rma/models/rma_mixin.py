@@ -611,7 +611,7 @@ class RMAMixin(models.AbstractModel):
 
     @api.model
     def _get_policy_field(self):
-        res = super(RMAMixin, self)._get_policy_field()
+        res = super()._get_policy_field()
         policy_field = [
             "confirm_ok",
             "approve_ok",
