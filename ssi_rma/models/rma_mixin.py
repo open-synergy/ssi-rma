@@ -551,17 +551,24 @@ class RMAMixin(models.AbstractModel):
 
     def _open_delivery(self):
         self.ensure_one()
-        rma_customer_out = self.env.ref("ssi_rma.picking_category_cro")
+        if self.type == "customer":
+            picking_categ = self.env.ref("ssi_rma.picking_category_cro")
+            waction_ref = self.env.ref("ssi_rma.customer_rma_out_action")
+        else:
+            picking_categ = self.env.ref("ssi_rma.picking_category_sro")
+            waction_ref = self.env.ref("ssi_rma.supplier_rma_out_action")
+
         pickings = self.stock_picking_ids.filtered(
-            lambda r: r.picking_type_category_id.id == rma_customer_out.id
+            lambda r: r.picking_type_category_id.id == picking_categ.id
         )
-        waction = self.env.ref("ssi_rma.customer_rma_out_action").read()[0]
+        waction = waction_ref.read()[0]
         waction.update(
             {
                 "view_mode": "tree,form",
                 "domain": [("id", "in", pickings.ids)],
             }
         )
+
         return waction
 
     @ssi_decorator.post_open_action()
