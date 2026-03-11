@@ -12,7 +12,7 @@ class RMASupplier(models.Model):
 
     # pylint: disable=pointless-statement
     def _prepare_refund_data(self):
-        _super = super(RMASupplier, self)
+        _super = super()
         result = _super._prepare_refund_data()
         result["move_type"] = "in_refund"
         return result

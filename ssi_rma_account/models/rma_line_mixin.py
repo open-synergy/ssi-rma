@@ -81,7 +81,7 @@ class RMALineMixin(models.AbstractModel):
 
     @api.model
     def _get_qty_field_trigger(self):
-        _super = super(RMALineMixin, self)
+        _super = super()
         result = _super._get_qty_field_trigger()
         result += ["qty_refund"]
         return result

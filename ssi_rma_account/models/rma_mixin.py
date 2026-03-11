@@ -206,11 +206,11 @@ class RMAMixin(models.AbstractModel):
 
     @api.depends(lambda self: self._get_resolve_ok_trigger())
     def _compute_resolve_ok(self):
-        _super = super(RMAMixin, self)
+        _super = super()
         _super._compute_resolve_ok()
 
     def _get_resolve_ok_trigger(self):
-        _super = super(RMAMixin, self)
+        _super = super()
         result = _super._get_resolve_ok_trigger()
         result.append("refund_complete")
         return result
@@ -285,7 +285,7 @@ class RMAMixin(models.AbstractModel):
 
     @api.model
     def _get_policy_field(self):
-        res = super(RMAMixin, self)._get_policy_field()
+        res = super()._get_policy_field()
         policy_field = [
             "create_refund_ok",
         ]

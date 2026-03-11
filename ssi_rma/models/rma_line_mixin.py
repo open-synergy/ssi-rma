@@ -290,7 +290,7 @@ class RMALineMixin(models.AbstractModel):
         "lot_id",
     )
     def onchange_price_unit(self):
-        _super = super(RMALineMixin, self)
+        _super = super()
         self.price_unit = 0.0
         Quant = self.env["stock.quant"]
         if self.lot_id and self.uom_quantity and self.uom_quantity != 0.0:
