@@ -1,0 +1,53 @@
+scenarios:
+  - name: "RMA Route Template - Create and verify"
+    steps:
+      - step: "Create inbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "inbound_route"
+        values:
+          name: "Test RMA Inbound Route"
+
+      - step: "Create outbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "outbound_route"
+        values:
+          name: "Test RMA Outbound Route"
+
+      - step: "Get main warehouse"
+        action: "ref"
+        xml_id: "stock.warehouse0"
+        save_as: "warehouse"
+
+      - step: "Get stock location"
+        action: "ref"
+        xml_id: "stock.stock_location_stock"
+        save_as: "stock_location"
+
+      - step: "Create RMA route template"
+        action: "create"
+        model: "rma_route_template"
+        save_as: "route_template"
+        values:
+          name: "Test RMA Route Template"
+          code: "TRTM001"
+          inbound_route_id: "EVAL: registry['inbound_route'].id"
+          outbound_route_id: "EVAL: registry['outbound_route'].id"
+          inbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          outbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          location_id: "EVAL: registry['stock_location'].id"
+
+      - step: "Assert route template created"
+        action: "assert"
+        target: "route_template"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test RMA Route Template"
+          active:
+            type: "value"
+            expected: true

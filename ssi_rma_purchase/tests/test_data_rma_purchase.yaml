@@ -1,0 +1,143 @@
+scenarios:
+  - name: "RMA Purchase - Create supplier RMA with purchase integration"
+    steps:
+      - step: "Create inbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "inbound_route"
+        values:
+          name: "Test RMA Purchase Inbound Route"
+
+      - step: "Create outbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "outbound_route"
+        values:
+          name: "Test RMA Purchase Outbound Route"
+
+      - step: "Get main warehouse"
+        action: "ref"
+        xml_id: "stock.warehouse0"
+        save_as: "warehouse"
+
+      - step: "Get stock location"
+        action: "ref"
+        xml_id: "stock.stock_location_stock"
+        save_as: "stock_location"
+
+      - step: "Get no-policy ref"
+        action: "ref"
+        xml_id: "ssi_rma.rma_policy_no"
+        save_as: "policy_no"
+
+      - step: "Create RMA route template"
+        action: "create"
+        model: "rma_route_template"
+        save_as: "route_template"
+        values:
+          name: "Test Purchase Route Template"
+          code: "TPURCH001"
+          inbound_route_id: "EVAL: registry['inbound_route'].id"
+          outbound_route_id: "EVAL: registry['outbound_route'].id"
+          inbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          outbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          location_id: "EVAL: registry['stock_location'].id"
+
+      - step: "Create RMA supplier operation"
+        action: "create"
+        model: "rma_operation"
+        save_as: "operation"
+        values:
+          name: "Test Purchase Supplier Operation"
+          code: "TPUROP001"
+          direction: "supplier"
+          receipt_policy_id: "EVAL: registry['policy_no'].id"
+          delivery_policy_id: "EVAL: registry['policy_no'].id"
+          rma_supplier_policy_id: "EVAL: registry['policy_no'].id"
+
+      - step: "Create RMA reason"
+        action: "create"
+        model: "rma_reason"
+        save_as: "reason"
+        values:
+          name: "Test Purchase Reason"
+          code: "TPUR001"
+
+      - step: "Create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Test RMA Purchase Partner"
+          supplier_rank: 1
+
+      - step: "Create product"
+        action: "create"
+        model: "product.product"
+        save_as: "product"
+        values:
+          name: "Test RMA Purchase Product"
+          type: "product"
+
+      - step: "Get unit of measure"
+        action: "ref"
+        xml_id: "uom.product_uom_unit"
+        save_as: "uom"
+
+      - step: "Create RMA supplier"
+        action: "create"
+        model: "rma_supplier"
+        save_as: "rma_supplier"
+        as_user: "base.user_admin"
+        values:
+          partner_id: "EVAL: registry['partner'].id"
+          reason_id: "EVAL: registry['reason'].id"
+          operation_id: "EVAL: registry['operation'].id"
+          route_template_id: "EVAL: registry['route_template'].id"
+          date_due: 2030-12-31
+
+      - step: "Add supplier line"
+        action: "create"
+        model: "rma_supplier_line"
+        save_as: "rma_line"
+        values:
+          order_id: "EVAL: registry['rma_supplier'].id"
+          product_id: "EVAL: registry['product'].id"
+          uom_id: "EVAL: registry['uom'].id"
+          uom_quantity: 4.0
+          name: "Test Product Description"
+      - step: "Assert RMA supplier created"
+        action: "assert"
+        target: "rma_supplier"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+      - step: "Confirm RMA supplier"
+        action: "call"
+        target: "rma_supplier"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Invalidate cache"
+        action: "call"
+        target: "rma_supplier"
+        method: "invalidate_cache"
+
+      - step: "Approve RMA supplier"
+        action: "call"
+        target: "rma_supplier"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"

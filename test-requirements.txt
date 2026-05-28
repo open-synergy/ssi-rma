@@ -1,3 +1,4 @@
+odoo-yaml-test
 odoo14-addon-ssi_frequency
 odoo14-addon-ssi_decorator
 odoo14-addon-ssi_localdict_mixin
