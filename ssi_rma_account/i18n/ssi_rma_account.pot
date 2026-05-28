@@ -171,6 +171,21 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_rma_account
+#: model:rma_policy,name:ssi_rma_account.rma_policy_delivered_refunded
+msgid "Based on Delivered - Received Quantities"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:rma_policy,name:ssi_rma_account.rma_policy_ordered_refunded
+msgid "Based on Ordered - Refunded Quantities"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:rma_policy,name:ssi_rma_account.rma_policy_received_refunded
+msgid "Based on Received - Refunded Quantities"
+msgstr ""
+
+#. module: ssi_rma_account
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__approve_ok
 msgid "Can Approve"
 msgstr ""
@@ -183,6 +198,23 @@ msgstr ""
 #. module: ssi_rma_account
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__confirm_ok
 msgid "Can Confirm"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__create_delivery_ok
+msgid "Can Create Delivery"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__create_reception_ok
+msgid "Can Create Reception"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_rma_customer__create_refund_ok
+#: model:ir.model.fields,field_description:ssi_rma_account.field_rma_order_mixin__create_refund_ok
+#: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__create_refund_ok
+msgid "Can Create Refund"
 msgstr ""
 
 #. module: ssi_rma_account
@@ -276,9 +308,35 @@ msgid "Contact"
 msgstr ""
 
 #. module: ssi_rma_account
+#: model:ir.model.fields,help:ssi_rma_account.field_rma_supplier__create_delivery_ok
+msgid ""
+"Create Delivery Policy\n"
+"\n"
+"* if active user can see and execute 'Create Delivery' button"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,help:ssi_rma_account.field_rma_supplier__create_reception_ok
+msgid ""
+"Create Reception Policy\n"
+"\n"
+"* if active user can see and execute 'Create Reception' button"
+msgstr ""
+
+#. module: ssi_rma_account
 #: model_terms:ir.ui.view,arch_db:ssi_rma_account.rma_customer_view_form
 #: model_terms:ir.ui.view,arch_db:ssi_rma_account.rma_supplier_view_form
 msgid "Create Refund"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,help:ssi_rma_account.field_rma_customer__create_refund_ok
+#: model:ir.model.fields,help:ssi_rma_account.field_rma_order_mixin__create_refund_ok
+#: model:ir.model.fields,help:ssi_rma_account.field_rma_supplier__create_refund_ok
+msgid ""
+"Create Refund Policy\n"
+"\n"
+"* if active user can see and execute 'Create Refund' button"
 msgstr ""
 
 #. module: ssi_rma_account
@@ -331,6 +389,7 @@ msgid "Detail Edit Ok"
 msgstr ""
 
 #. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:ssi_rma_account.field_link_journal_item_rma_line__display_name
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_customer_line__display_name
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_line_mixin__display_name
@@ -376,6 +435,7 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
 
 #. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_account_move_line__id
 #: model:ir.model.fields,field_description:ssi_rma_account.field_link_journal_item_rma_line__id
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_customer_line__id
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_line_mixin__id
@@ -414,6 +474,7 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_rma_account
+#: model:ir.model,name:ssi_rma_account.model_account_move_line
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_customer_line__account_move_line_ids
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_line_mixin__account_move_line_ids
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier_line__account_move_line_ids
@@ -428,6 +489,7 @@ msgid "Journal Items"
 msgstr ""
 
 #. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_account_move_line____last_update
 #: model:ir.model.fields,field_description:ssi_rma_account.field_link_journal_item_rma_line____last_update
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_customer_line____last_update
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_line_mixin____last_update
@@ -863,6 +925,11 @@ msgid "Refund Pricelist"
 msgstr ""
 
 #. module: ssi_rma_account
+#: model:rma_policy_field,name:ssi_rma_account.rma_policy_field_refund
+msgid "Refunded"
+msgstr ""
+
+#. module: ssi_rma_account
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_customer__refund_ids
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_order_mixin__refund_ids
 #: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__refund_ids
@@ -913,6 +980,21 @@ msgid ""
 "Restart policy\n"
 "\n"
 "* If active user can see and execute 'Restart' button"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_rma_supplier__reviewer_id
+msgid "Reviewer"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_account_move_line__rma_customer_line_ids
+msgid "Rma Customer Line"
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,field_description:ssi_rma_account.field_account_move_line__rma_supplier_line_ids
+msgid "Rma Supplier Line"
 msgstr ""
 
 #. module: ssi_rma_account
@@ -1074,6 +1156,14 @@ msgid ""
 "* Create user can be different with responsible user\n"
 "* Automatically filled with user that initiate document creation.\n"
 "  Default responsible can be changed."
+msgstr ""
+
+#. module: ssi_rma_account
+#: model:ir.model.fields,help:ssi_rma_account.field_rma_supplier__reviewer_id
+msgid ""
+"User that responsible to review document\n"
+"\n"
+"* Unless it configured to approve reviewer does not equal to approver"
 msgstr ""
 
 #. module: ssi_rma_account
