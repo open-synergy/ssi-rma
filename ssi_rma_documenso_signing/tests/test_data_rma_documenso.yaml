@@ -1,0 +1,188 @@
+scenarios:
+  - name: "RMA Documenso - Create customer RMA with documenso integration"
+    steps:
+      - step: "Create inbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "inbound_route"
+        values:
+          name: "Test RMA Documenso Inbound Route"
+
+      - step: "Create outbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "outbound_route"
+        values:
+          name: "Test RMA Documenso Outbound Route"
+
+      - step: "Get main warehouse"
+        action: "ref"
+        xml_id: "stock.warehouse0"
+        save_as: "warehouse"
+
+      - step: "Get stock location"
+        action: "ref"
+        xml_id: "stock.stock_location_stock"
+        save_as: "stock_location"
+
+      - step: "Get no-policy ref"
+        action: "ref"
+        xml_id: "ssi_rma.rma_policy_no"
+        save_as: "policy_no"
+
+      - step: "Create RMA route template"
+        action: "create"
+        model: "rma_route_template"
+        save_as: "route_template"
+        values:
+          name: "Test Documenso Route Template"
+          code: "TDOCRT001"
+          inbound_route_id: "EVAL: registry['inbound_route'].id"
+          outbound_route_id: "EVAL: registry['outbound_route'].id"
+          inbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          outbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          location_id: "EVAL: registry['stock_location'].id"
+
+      - step: "Create RMA customer operation"
+        action: "create"
+        model: "rma_operation"
+        save_as: "operation"
+        values:
+          name: "Test Documenso Customer Operation"
+          code: "TDOCOP001"
+          direction: "customer"
+          receipt_policy_id: "EVAL: registry['policy_no'].id"
+          delivery_policy_id: "EVAL: registry['policy_no'].id"
+          rma_supplier_policy_id: "EVAL: registry['policy_no'].id"
+
+      - step: "Create RMA reason"
+        action: "create"
+        model: "rma_reason"
+        save_as: "reason"
+        values:
+          name: "Test Documenso Reason"
+          code: "TDOC001"
+
+      - step: "Create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Test RMA Documenso Partner"
+
+      - step: "Create RMA customer with documenso"
+        action: "create"
+        model: "rma_customer"
+        save_as: "rma_customer"
+        as_user: "base.user_admin"
+        values:
+          partner_id: "EVAL: registry['partner'].id"
+          reason_id: "EVAL: registry['reason'].id"
+          operation_id: "EVAL: registry['operation'].id"
+          route_template_id: "EVAL: registry['route_template'].id"
+          date_due: 2030-12-31
+
+      - step: "Assert RMA customer created"
+        action: "assert"
+        target: "rma_customer"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "RMA Documenso - Create supplier RMA with documenso integration"
+    steps:
+      - step: "Create inbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "inbound_route"
+        values:
+          name: "Test RMA Documenso Supplier Inbound Route"
+
+      - step: "Create outbound stock route"
+        action: "create"
+        model: "stock.location.route"
+        save_as: "outbound_route"
+        values:
+          name: "Test RMA Documenso Supplier Outbound Route"
+
+      - step: "Get main warehouse"
+        action: "ref"
+        xml_id: "stock.warehouse0"
+        save_as: "warehouse"
+
+      - step: "Get stock location"
+        action: "ref"
+        xml_id: "stock.stock_location_stock"
+        save_as: "stock_location"
+
+      - step: "Get no-policy ref"
+        action: "ref"
+        xml_id: "ssi_rma.rma_policy_no"
+        save_as: "policy_no"
+
+      - step: "Create RMA route template"
+        action: "create"
+        model: "rma_route_template"
+        save_as: "route_template"
+        values:
+          name: "Test Documenso Supplier Route Template"
+          code: "TDOCRS001"
+          inbound_route_id: "EVAL: registry['inbound_route'].id"
+          outbound_route_id: "EVAL: registry['outbound_route'].id"
+          inbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          outbound_warehouse_id: "EVAL: registry['warehouse'].id"
+          location_id: "EVAL: registry['stock_location'].id"
+
+      - step: "Create RMA supplier operation"
+        action: "create"
+        model: "rma_operation"
+        save_as: "operation"
+        values:
+          name: "Test Documenso Supplier Operation"
+          code: "TDOCSOP001"
+          direction: "supplier"
+          receipt_policy_id: "EVAL: registry['policy_no'].id"
+          delivery_policy_id: "EVAL: registry['policy_no'].id"
+          rma_supplier_policy_id: "EVAL: registry['policy_no'].id"
+
+      - step: "Create RMA reason"
+        action: "create"
+        model: "rma_reason"
+        save_as: "reason"
+        values:
+          name: "Test Documenso Supplier Reason"
+          code: "TDOCS001"
+
+      - step: "Create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Test RMA Documenso Supplier Partner"
+
+      - step: "Create RMA supplier"
+        action: "create"
+        model: "rma_supplier"
+        save_as: "rma_supplier"
+        as_user: "base.user_admin"
+        values:
+          partner_id: "EVAL: registry['partner'].id"
+          reason_id: "EVAL: registry['reason'].id"
+          operation_id: "EVAL: registry['operation'].id"
+          route_template_id: "EVAL: registry['route_template'].id"
+          date_due: 2030-12-31
+
+      - step: "Assert RMA supplier created"
+        action: "assert"
+        target: "rma_supplier"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          id:
+            type: "value"
+            operator: "is_truthy"
