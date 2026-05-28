@@ -287,6 +287,31 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_rma
+#: model:rma_policy,name:ssi_rma.rma_policy_delivered_received
+msgid "Based on Delivered - Received Quantities"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy,name:ssi_rma.rma_policy_ordered_delivered
+msgid "Based on Ordered - Delivered Quantities"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy,name:ssi_rma.rma_policy_ordered_received
+msgid "Based on Ordered - Received Quantities"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy,name:ssi_rma.rma_policy_received_delivered
+msgid "Based on Received - Delivered Quantities"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy,name:ssi_rma.rma_policy_rma_delivered
+msgid "Based on in RMA Supplier - Delivered Quantities"
+msgstr ""
+
+#. module: ssi_rma
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_policy__rma_type__both
 msgid "Both"
 msgstr ""
@@ -310,6 +335,20 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_order_mixin__confirm_ok
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_supplier__confirm_ok
 msgid "Can Confirm"
+msgstr ""
+
+#. module: ssi_rma
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_customer__create_delivery_ok
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_order_mixin__create_delivery_ok
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_supplier__create_delivery_ok
+msgid "Can Create Delivery"
+msgstr ""
+
+#. module: ssi_rma
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_customer__create_reception_ok
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_order_mixin__create_reception_ok
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_supplier__create_reception_ok
+msgid "Can Create Reception"
 msgstr ""
 
 #. module: ssi_rma
@@ -463,8 +502,28 @@ msgid "Create Delivery"
 msgstr ""
 
 #. module: ssi_rma
+#: model:ir.model.fields,help:ssi_rma.field_rma_customer__create_delivery_ok
+#: model:ir.model.fields,help:ssi_rma.field_rma_order_mixin__create_delivery_ok
+#: model:ir.model.fields,help:ssi_rma.field_rma_supplier__create_delivery_ok
+msgid ""
+"Create Delivery Policy\n"
+"\n"
+"* if active user can see and execute 'Create Delivery' button"
+msgstr ""
+
+#. module: ssi_rma
 #: model_terms:ir.ui.view,arch_db:ssi_rma.rma_mixin_view_form
 msgid "Create Reception"
+msgstr ""
+
+#. module: ssi_rma
+#: model:ir.model.fields,help:ssi_rma.field_rma_customer__create_reception_ok
+#: model:ir.model.fields,help:ssi_rma.field_rma_order_mixin__create_reception_ok
+#: model:ir.model.fields,help:ssi_rma.field_rma_supplier__create_reception_ok
+msgid ""
+"Create Reception Policy\n"
+"\n"
+"* if active user can see and execute 'Create Reception' button"
 msgstr ""
 
 #. module: ssi_rma
@@ -528,6 +587,7 @@ msgstr ""
 #: model:ir.module.category,name:ssi_rma.customer_rma_in_data_ownership_module_category
 #: model:ir.module.category,name:ssi_rma.customer_rma_in_workflow_module_category
 #: model:ir.ui.menu,name:ssi_rma.customer_rma_in_menu
+#: model:picking_type_category,name:ssi_rma.picking_category_cri
 msgid "Customer RMA In"
 msgstr ""
 
@@ -536,6 +596,7 @@ msgstr ""
 #: model:ir.module.category,name:ssi_rma.customer_rma_out_data_ownership_module_category
 #: model:ir.module.category,name:ssi_rma.customer_rma_out_workflow_module_category
 #: model:ir.ui.menu,name:ssi_rma.customer_rma_out_menu
+#: model:picking_type_category,name:ssi_rma.picking_category_cro
 msgid "Customer RMA Out"
 msgstr ""
 
@@ -563,6 +624,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_order_mixin__deliver_ok
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_supplier__deliver_ok
 msgid "Deliver Ok"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy_field,name:ssi_rma.rma_policy_field_delivered
+msgid "Delivered"
 msgstr ""
 
 #. module: ssi_rma
@@ -815,6 +881,11 @@ msgstr ""
 #. module: ssi_rma
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_route_template__inbound_warehouse_id
 msgid "In Bound Warehouse"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy_field,name:ssi_rma.rma_policy_field_rma_supplier
+msgid "In RMA Supplier"
 msgstr ""
 
 #. module: ssi_rma
@@ -1103,6 +1174,11 @@ msgid "Next Approvals"
 msgstr ""
 
 #. module: ssi_rma
+#: model:rma_policy,name:ssi_rma.rma_policy_no
+msgid "Not Required"
+msgstr ""
+
+#. module: ssi_rma
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_customer__note
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_customer_line__note
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_line_mixin__note
@@ -1212,6 +1288,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_customer_line__order_id
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_supplier_line__order_id
 msgid "Order"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy_field,name:ssi_rma.rma_policy_field_ordered
+msgid "Ordered"
 msgstr ""
 
 #. module: ssi_rma
@@ -1471,6 +1552,7 @@ msgstr ""
 #. module: ssi_rma
 #: model:ir.ui.menu,name:ssi_rma.menu_rma
 #: model:ir.ui.menu,name:ssi_rma.menu_rma_config
+#: model:location_type,name:ssi_rma.location_type_rma
 msgid "RMA"
 msgstr ""
 
@@ -1658,6 +1740,16 @@ msgid "Receiption Not Needed"
 msgstr ""
 
 #. module: ssi_rma
+#: model:rma_route_template,name:ssi_rma.rma_route_template_demo1
+msgid "Receive and Replace From San Fransisco - (test)"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_policy_field,name:ssi_rma.rma_policy_field_received
+msgid "Received"
+msgstr ""
+
+#. module: ssi_rma
 #: model_terms:ir.ui.view,arch_db:ssi_rma.rma_mixin_view_form
 #: model_terms:ir.ui.view,arch_db:ssi_rma.rma_mixin_view_tree
 msgid "Reception"
@@ -1680,6 +1772,16 @@ msgid "Reception Not Complete"
 msgstr ""
 
 #. module: ssi_rma
+#: model:rma_operation,name:ssi_rma.rma_operation_demo3
+msgid "Refund before receive"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_operation,name:ssi_rma.rma_operation_demo4
+msgid "Refund only"
+msgstr ""
+
+#. module: ssi_rma
 #: model:ir.model.fields,help:ssi_rma.field_rma_customer__reject_ok
 #: model:ir.model.fields,help:ssi_rma.field_rma_order_mixin__reject_ok
 #: model:ir.model.fields,help:ssi_rma.field_rma_supplier__reject_ok
@@ -1694,6 +1796,31 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_order_mixin__rejected
 #: model:ir.model.fields,field_description:ssi_rma.field_rma_supplier__rejected
 msgid "Rejected"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_operation,name:ssi_rma.rma_operation_demo2
+msgid "Replace"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_operation,name:ssi_rma.rma_operation_demo1
+msgid "Replace After Receive"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_operation,name:ssi_rma.rma_operation_demo7
+msgid "Replace deliver to customer"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_operation,name:ssi_rma.rma_operation_demo5
+msgid "Replace deliver to vendor"
+msgstr ""
+
+#. module: ssi_rma
+#: model:rma_operation,name:ssi_rma.rma_operation_demo6
+msgid "Replace receive in vendor"
 msgstr ""
 
 #. module: ssi_rma
@@ -1745,6 +1872,13 @@ msgid ""
 "Restart policy\n"
 "\n"
 "* If active user can see and execute 'Restart' button"
+msgstr ""
+
+#. module: ssi_rma
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_customer__reviewer_id
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_order_mixin__reviewer_id
+#: model:ir.model.fields,field_description:ssi_rma.field_rma_supplier__reviewer_id
+msgid "Reviewer"
 msgstr ""
 
 #. module: ssi_rma
@@ -1968,6 +2102,7 @@ msgstr ""
 #: model:ir.module.category,name:ssi_rma.supplier_rma_in_data_ownership_module_category
 #: model:ir.module.category,name:ssi_rma.supplier_rma_in_workflow_module_category
 #: model:ir.ui.menu,name:ssi_rma.supplier_rma_in_menu
+#: model:picking_type_category,name:ssi_rma.picking_category_sri
 msgid "Supplier RMA In"
 msgstr ""
 
@@ -1976,6 +2111,7 @@ msgstr ""
 #: model:ir.module.category,name:ssi_rma.supplier_rma_out_data_ownership_module_category
 #: model:ir.module.category,name:ssi_rma.supplier_rma_out_workflow_module_category
 #: model:ir.ui.menu,name:ssi_rma.supplier_rma_out_menu
+#: model:picking_type_category,name:ssi_rma.picking_category_sro
 msgid "Supplier RMA Out"
 msgstr ""
 
@@ -2111,6 +2247,16 @@ msgid ""
 "* Create user can be different with responsible user\n"
 "* Automatically filled with user that initiate document creation.\n"
 "  Default responsible can be changed."
+msgstr ""
+
+#. module: ssi_rma
+#: model:ir.model.fields,help:ssi_rma.field_rma_customer__reviewer_id
+#: model:ir.model.fields,help:ssi_rma.field_rma_order_mixin__reviewer_id
+#: model:ir.model.fields,help:ssi_rma.field_rma_supplier__reviewer_id
+msgid ""
+"User that responsible to review document\n"
+"\n"
+"* Unless it configured to approve reviewer does not equal to approver"
 msgstr ""
 
 #. module: ssi_rma
