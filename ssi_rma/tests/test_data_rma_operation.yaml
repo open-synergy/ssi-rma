@@ -1,0 +1,63 @@
+scenarios:
+  - name: "RMA Operation - Create customer direction operation"
+    steps:
+      - step: "Get no-policy ref"
+        action: "ref"
+        xml_id: "ssi_rma.rma_policy_no"
+        save_as: "policy_no"
+
+      - step: "Create customer RMA operation"
+        action: "create"
+        model: "rma_operation"
+        save_as: "operation"
+        values:
+          name: "Test Customer Operation"
+          code: "TCO001"
+          direction: "customer"
+          receipt_policy_id: "EVAL: registry['policy_no'].id"
+          delivery_policy_id: "EVAL: registry['policy_no'].id"
+          rma_supplier_policy_id: "EVAL: registry['policy_no'].id"
+
+      - step: "Assert operation created"
+        action: "assert"
+        target: "operation"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test Customer Operation"
+          direction:
+            type: "value"
+            expected: "customer"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "RMA Operation - Create supplier direction operation"
+    steps:
+      - step: "Get no-policy ref"
+        action: "ref"
+        xml_id: "ssi_rma.rma_policy_no"
+        save_as: "policy_no"
+
+      - step: "Create supplier RMA operation"
+        action: "create"
+        model: "rma_operation"
+        save_as: "operation"
+        values:
+          name: "Test Supplier Operation"
+          code: "TSO001"
+          direction: "supplier"
+          receipt_policy_id: "EVAL: registry['policy_no'].id"
+          delivery_policy_id: "EVAL: registry['policy_no'].id"
+          rma_supplier_policy_id: "EVAL: registry['policy_no'].id"
+
+      - step: "Assert supplier operation created"
+        action: "assert"
+        target: "operation"
+        asserts:
+          direction:
+            type: "value"
+            expected: "supplier"

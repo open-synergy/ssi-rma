@@ -1,0 +1,51 @@
+scenarios:
+  - name: "RMA Reason - Create and verify master data"
+    steps:
+      - step: "Create RMA reason"
+        action: "create"
+        model: "rma_reason"
+        save_as: "reason"
+        values:
+          name: "Test RMA Reason"
+          code: "TRR001"
+
+      - step: "Assert reason created"
+        action: "assert"
+        target: "reason"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test RMA Reason"
+          code:
+            type: "value"
+            expected: "TRR001"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "RMA Reason - Update and deactivate"
+    steps:
+      - step: "Create RMA reason to update"
+        action: "create"
+        model: "rma_reason"
+        save_as: "reason"
+        values:
+          name: "Old Reason Name"
+          code: "TRR002"
+
+      - step: "Update reason name"
+        action: "write"
+        target: "reason"
+        values:
+          name: "Updated Reason Name"
+
+      - step: "Assert name updated"
+        action: "assert"
+        target: "reason"
+        asserts:
+          name:
+            type: "value"
+            expected: "Updated Reason Name"
