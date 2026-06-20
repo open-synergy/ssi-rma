@@ -18,7 +18,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_rma](ssi_rma/) | 14.0.2.8.0 |  | RMA
+[ssi_rma](ssi_rma/) | 14.0.2.9.0 |  | RMA
 [ssi_rma_account](ssi_rma_account/) | 14.0.1.12.0 |  | RMA + Accounting Integration
 [ssi_rma_documenso_signing](ssi_rma_documenso_signing/) | 14.0.1.1.0 |  | RMA - Documenso Signing Integration
 [ssi_rma_purchase](ssi_rma_purchase/) | 14.0.1.4.0 |  | RMA + Purchase Integration
