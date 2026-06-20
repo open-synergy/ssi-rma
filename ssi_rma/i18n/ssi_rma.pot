@@ -313,6 +313,7 @@ msgstr ""
 
 #. module: ssi_rma
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_policy__rma_type__both
+#: model_terms:ir.ui.view,arch_db:ssi_rma.rma_policy_view_search
 msgid "Both"
 msgstr ""
 
@@ -573,12 +574,14 @@ msgstr ""
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_order_mixin__type__customer
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_policy__rma_type__customer
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_supplier__type__customer
+#: model_terms:ir.ui.view,arch_db:ssi_rma.rma_operation_view_search
 msgid "Customer"
 msgstr ""
 
 #. module: ssi_rma
 #: model:ir.module.category,name:ssi_rma.customer_rma_data_ownership_module_category
 #: model:ir.module.category,name:ssi_rma.customer_rma_workflow_module_category
+#: model_terms:ir.ui.view,arch_db:ssi_rma.rma_policy_view_search
 msgid "Customer RMA"
 msgstr ""
 
@@ -598,6 +601,11 @@ msgstr ""
 #: model:ir.ui.menu,name:ssi_rma.customer_rma_out_menu
 #: model:picking_type_category,name:ssi_rma.picking_category_cro
 msgid "Customer RMA Out"
+msgstr ""
+
+#. module: ssi_rma
+#: model_terms:ir.ui.view,arch_db:ssi_rma.rma_route_template_view_search
+msgid "Customer to Supplier"
 msgstr ""
 
 #. module: ssi_rma
@@ -2088,12 +2096,14 @@ msgstr ""
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_order_mixin__type__supplier
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_policy__rma_type__supplier
 #: model:ir.model.fields.selection,name:ssi_rma.selection__rma_supplier__type__supplier
+#: model_terms:ir.ui.view,arch_db:ssi_rma.rma_operation_view_search
 msgid "Supplier"
 msgstr ""
 
 #. module: ssi_rma
 #: model:ir.module.category,name:ssi_rma.supplier_rma_data_ownership_module_category
 #: model:ir.module.category,name:ssi_rma.supplier_rma_workflow_module_category
+#: model_terms:ir.ui.view,arch_db:ssi_rma.rma_policy_view_search
 msgid "Supplier RMA"
 msgstr ""
 
@@ -2113,6 +2123,11 @@ msgstr ""
 #: model:ir.ui.menu,name:ssi_rma.supplier_rma_out_menu
 #: model:picking_type_category,name:ssi_rma.picking_category_sro
 msgid "Supplier RMA Out"
+msgstr ""
+
+#. module: ssi_rma
+#: model_terms:ir.ui.view,arch_db:ssi_rma.rma_route_template_view_search
+msgid "Supplier to Customer"
 msgstr ""
 
 #. module: ssi_rma
