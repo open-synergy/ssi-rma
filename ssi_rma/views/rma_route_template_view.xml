@@ -25,7 +25,24 @@
             ref="ssi_master_data_mixin.mixin_master_data_view_search"
         />
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//search" position="inside">
+                    <field name="inbound_warehouse_id" />
+                    <field name="outbound_warehouse_id" />
+                    <field name="location_id" />
+                    <separator />
+                    <filter
+                        name="dom_customer_to_supplier"
+                        string="Customer to Supplier"
+                        domain="[('customer_to_supplier','=',True)]"
+                    />
+                    <filter
+                        name="dom_supplier_to_customer"
+                        string="Supplier to Customer"
+                        domain="[('supplier_to_customer','=',True)]"
+                    />
+                </xpath>
+            </data>
         </field>
     </record>
 
