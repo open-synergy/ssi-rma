@@ -25,7 +25,26 @@
             ref="ssi_master_data_mixin.mixin_master_data_view_search"
         />
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//search" position="inside">
+                    <field name="direction" />
+                    <field name="receipt_policy_id" />
+                    <field name="delivery_policy_id" />
+                    <field name="rma_supplier_policy_id" />
+                    <field name="default_route_template_id" />
+                    <separator />
+                    <filter
+                        name="dom_customer"
+                        string="Customer"
+                        domain="[('direction','=','customer')]"
+                    />
+                    <filter
+                        name="dom_supplier"
+                        string="Supplier"
+                        domain="[('direction','=','supplier')]"
+                    />
+                </xpath>
+            </data>
         </field>
     </record>
 

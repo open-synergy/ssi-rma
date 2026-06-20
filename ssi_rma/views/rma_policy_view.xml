@@ -25,7 +25,27 @@
             ref="ssi_master_data_mixin.mixin_master_data_view_search"
         />
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//search" position="inside">
+                    <field name="rma_type" />
+                    <separator />
+                    <filter
+                        name="dom_customer"
+                        string="Customer RMA"
+                        domain="[('rma_type','=','customer')]"
+                    />
+                    <filter
+                        name="dom_supplier"
+                        string="Supplier RMA"
+                        domain="[('rma_type','=','supplier')]"
+                    />
+                    <filter
+                        name="dom_both"
+                        string="Both"
+                        domain="[('rma_type','=','both')]"
+                    />
+                </xpath>
+            </data>
         </field>
     </record>
 
